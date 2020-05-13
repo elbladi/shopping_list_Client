@@ -1,0 +1,14 @@
+.up {
+    position: fixed;
+    bottom: 8px;
+    height: 38px;
+    box-sizing: border-box;
+    transform: rotate(180deg);
+    fill: white;
+    width: 100%;
+}
+
+.up svg {
+    height: 100%;
+    width: 15%;
+}

@@ -1,0 +1,31 @@
+.options{
+    font-size: 2rem;
+    top: 30%;
+    background-color: #ffffff96;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    z-index: 2;
+    position: fixed;
+    transition: transform 400ms ease-in-out;
+}
+
+input{
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.slide_in {
+    transform: translateX(0);
+}
+
+.slide_out {
+    transform: translateX(-360px);
+}
+
+.options li:first-child{
+    color: red;
+    text-align: end;
+}

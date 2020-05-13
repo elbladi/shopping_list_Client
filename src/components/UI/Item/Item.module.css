@@ -1,0 +1,52 @@
+.item_container{
+    display: flex;
+    flex-direction: column;
+    width: 79px;
+    height: 128px;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 46px 14%;
+}
+
+button{
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  overflow: visible;
+  padding: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.item_add svg,
+.item_delete img{
+    width: 26.19px;
+    height: 21.27px;
+}
+
+.item_ima_count{
+    display: flex;
+}
+
+.from_blad .item_count{ 
+    color: white;
+}
+
+.item_ima img{
+    width: 80px;
+    height: 111.86px;
+}
+
+.item_count{
+    font-family: 'Merienda', cursive;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.8rem;
+    line-height: 69px;
+    position: relative;
+    top: 65px;
+    left: -25px;
+}

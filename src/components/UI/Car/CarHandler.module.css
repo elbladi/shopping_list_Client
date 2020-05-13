@@ -1,0 +1,27 @@
+
+.images{
+    background-color: #ffffff96;
+    position: fixed;
+    top: 0;
+    margin: 40vh 10vw;
+    display: flex;
+    width: 80%;
+    height: 20%;
+    min-height: 20%;
+    transition: transform 400ms ease-in-out;
+    z-index: 120;
+    justify-content: center;
+}
+
+.images svg{
+    height: auto;
+    width: 147px;
+}
+
+.slide_in {
+    transform: translateX(0);
+}
+
+.slide_out {
+    transform: translateX(360px);
+}

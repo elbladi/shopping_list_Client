@@ -1,0 +1,36 @@
+.header{
+    font-family: 'Merienda', cursive;
+    display: flex;
+    margin-top: 5%;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.header span{
+    color: black;
+    font-size: 2rem;
+    border-color: white;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    -webkit-text-stroke: 0.5px white;
+}
+
+.icon svg
+{
+    height: 30px;
+    box-sizing: border-box;
+    width: auto;
+    position: relative;
+    top: 4px;
+    left: -2px;
+}
+
+.close svg{
+    height: 25px;
+    width: auto;
+    position: relative;
+}
+
+.close_blad{
+    transform: rotate(180deg);
+    fill: white;
+}
