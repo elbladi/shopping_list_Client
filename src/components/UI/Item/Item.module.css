@@ -38,6 +38,7 @@ button{
 .item_ima img{
     width: 80px;
     height: 111.86px;
+    object-fit: contain;
 }
 
 .item_count{

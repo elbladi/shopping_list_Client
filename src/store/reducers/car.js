@@ -1,20 +1,22 @@
 import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../utility';
-import { reorder } from 'react-reorder';
 
 const initialState = {
     added: [],
     showCarOptions: false,
     selected: "",
     existInList: false,
-    showCar: false
+    showCar: false,
+    goShopping: false,
+    loading: false,
+    listToShop: []
 }
 
 const showCarOptions = (state, action) => {
     let exist = false;
-    if (state.added.includes(action.selected)) {
-        exist = true;
-    }
+    const itemExist = state.listToShop.filter(item => item.name === action.selected)
+    if (itemExist.length > 0) exist = true;
+
     return updateObject(state, {
         showCarOptions: true,
         selected: action.selected,
@@ -23,14 +25,18 @@ const showCarOptions = (state, action) => {
 }
 
 const addToCar = (state, action) => {
-    const newState = state.added;
-    newState.push(action.name);
-    return updateObject(state, { added: newState })
+    const newState = state.listToShop;
+    const item = {
+        name: action.name,
+        checked: false
+    }
+    newState.push(item);
+    return updateObject(state, { listToShop: newState })
 }
 
 const removeToCar = (state, action) => {
-    const newState = state.added.filter(item => item !== action.name);
-    return updateObject(state, { added: newState })
+    const newState = state.listToShop.filter(item => item.name !== action.name);
+    return updateObject(state, { listToShop: newState })
 }
 
 const closeCarOptions = (state, action) => {
@@ -42,7 +48,7 @@ const closeCarOptions = (state, action) => {
 
 const getCar = (state, action) => {
     return updateObject(state, {
-        added: action.car
+        listToShop: action.car
     })
 }
 
@@ -59,9 +65,51 @@ const sendEmail = (state, action) => {
 }
 
 const setOrder = (state, action) => {
-    const newArray = reorder(state.added, action.previousIndex, action.nextIndex)
     return updateObject(state, {
-        added: newArray
+        listToShop: action.newArray
+    });
+}
+
+const goShopping = (state, action) => {
+    return updateObject(state, {
+        goShopping: !state.goShopping
+    })
+}
+
+const checkItem = (state, action) => {
+
+    const oldList = [...state.listToShop];
+    const index = oldList.map(item => item.name).indexOf(action.name)
+    oldList[index].checked = !oldList[index].checked
+
+    return updateObject(state, {
+        listToShop: oldList
+    });
+}
+
+const clearAddedList = (state, action) => {
+    return updateObject(state, {
+        listToShop: action.list,
+        goShopping: false
+    });
+}
+
+const initLoading = (state, action) => {
+    return updateObject(state, {
+        loading: true
+    });
+}
+
+const endLoading = (state, action) => {
+    return updateObject(state, {
+        loading: false
+    });
+}
+
+const getListSuccess = (state, action) => {
+    return updateObject(state, {
+        listToShop: action.items,
+        loading: false
     });
 }
 
@@ -77,6 +125,12 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SHOW_CAR: return setShowCar(state, action);
         case actionTypes.SEND_MAIL: return sendEmail(state, action);
         case actionTypes.SET_ORDER: return setOrder(state, action);
+        case actionTypes.GO_SHOPPING: return goShopping(state, action);
+        case actionTypes.CHECK_ITEM: return checkItem(state, action);
+        case actionTypes.CLEAR_ADDED_LIST: return clearAddedList(state, action);
+        case actionTypes.INIT_LOADING: return initLoading(state, action);
+        case actionTypes.END_LOADING: return endLoading(state, action);
+        case actionTypes.GET_LIST_SUCCESS: return getListSuccess(state, action);
         default: return state;
     }
 

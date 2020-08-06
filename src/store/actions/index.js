@@ -30,5 +30,9 @@ export {
     getCar,
     sendMail,
     setShowCar,
-    setOrder
+    setOrder,
+    goShopping,
+    checkItem,
+    clearAddedList,
+    getList
 } from './car';
