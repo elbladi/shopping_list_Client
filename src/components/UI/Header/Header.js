@@ -38,6 +38,11 @@ const Header = (props) => {
         props.onHandleFilter();
     }
 
+    const handleClickInHeader = () => {
+        if (!props.goShopping) props.setShowCar(true);
+        else props.closeGoShopping()
+    }
+
 
     return (
         <Fragment>
@@ -50,7 +55,7 @@ const Header = (props) => {
             )}
             <div className={classes.header}>
                 <div className={classes.close} onClick={(event) => logout(event)} > {logoutIcon} </div>
-                <span onClick={() => props.setShowCar(true)} >My Shopping list</span>
+                <span onClick={() => handleClickInHeader()} >My Shopping list</span>
                 <FilterOptions visible={showFilter} click={(event) => changeFilter(event)} />
                 {!showFilter && <div onClick={(event) => changeFilter(event)} className={classes.icon}> {Icon} </div>}
             </div>
@@ -64,7 +69,8 @@ const mapStateToProps = state => {
         token: state.login.token == null,
         filter: state.filter.openfilter,
         socket: state.items.socket,
-        showCar: state.car.showCar
+        showCar: state.car.showCar,
+        goShopping: state.car.goShopping,
     }
 }
 
@@ -74,7 +80,8 @@ const mapDispatchToProps = dispatch => {
         onHandleFilter: () => dispatch(actions.openFilter()),
         onSetItems: () => dispatch(actions.setItems()),
         onLogoutFilter: () => dispatch(actions.closeFilter()),
-        setShowCar: (show) => dispatch(actions.setShowCar(show))
+        setShowCar: (show) => dispatch(actions.setShowCar(show)),
+        closeGoShopping: () => dispatch(actions.goShopping()),
     };
 };
 

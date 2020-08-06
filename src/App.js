@@ -37,8 +37,6 @@ const App = props => {
     )
   }
 
-
-
   return (
     <Fragment>
       {routes}
@@ -49,7 +47,7 @@ const App = props => {
 const mapStateToProps = state => {
   return {
     userId: state.login.userId,
-    token: state.login.token !== null
+    token: state.login.token !== null,
   }
 }
 

@@ -1,0 +1,90 @@
+.card{
+    position: relative;
+    margin: 6% auto;
+    flex-direction: column;
+    display: flex;
+    max-height: 80vh;
+    min-height: 80vh;
+    width: 80%;
+    background-color: white;
+    box-shadow: inset 0px 4px 28px #4F4F4F;
+    border-radius: 15px;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.loading{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+.loading img{
+    height: 50%;
+    margin: 50% 0;
+}
+
+.close{
+    position: absolute;
+    right: 10px;
+    color: red;
+    top: 10px;
+}
+
+.itemRow{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    font-size: 1rem;
+    align-items: center;
+    margin: 2% 0;
+}
+
+.itemRow svg{
+    height: 25px;
+    width: 25px;
+}
+
+.itemRow span{
+    margin-left: 10px;
+}
+
+.items{
+    height: 85%;
+    position: absolute;
+    width: 80%;
+    box-sizing: border-box;
+    overflow: scroll;
+}
+
+.button{
+    position: absolute;
+    bottom: 5%;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+
+.button button{
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    width: 50%;
+    box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.25);
+}
+
+.itemName{
+    text-decoration: line-through;
+    color: #787878;
+}
+.emptyCar {
+    display: flex;
+    justify-content: center;
+    margin: 50px;
+}
+
+.emptyCar svg {
+    max-width: 60px;
+    max-height: 60px;
+}

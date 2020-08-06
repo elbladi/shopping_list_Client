@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Reorder from 'react-reorder';
 import classes from './Car.module.css';
-import { ReactComponent as Mail } from '../assets/mail.svg';
 import { ReactComponent as Delete } from '../assets/delete.svg';
 import { ReactComponent as Empty } from '../assets/empty.svg';
 import * as actions from '../../../store/actions';
@@ -27,12 +26,12 @@ const Car = props => {
             lock="horizontal"
         >
             {props.added.map(item => {
-                let itemName = item.replace('_', ' ');
+                let itemName = item.name.replace('_', ' ');
                 itemName = itemName.charAt(0).toUpperCase() + itemName.slice(1);
                 return (
-                    <div key={item} className={classes.item} >
+                    <div key={item.name} className={classes.item} >
                         <div className={classes.itemName} >{itemName}</div>
-                        <Delete onClick={() => props.removeToCar(item)} />
+                        <Delete onClick={() => props.removeToCar(item.name)} />
                     </div>
                 )
             })}
@@ -44,8 +43,8 @@ const Car = props => {
     return (
         <div className={classes.carModal} >
             <div className={classes.header} >
+                <div className={classes.go} onClick={() => props.goShopping()} ><span>Go Shopping!</span></div>
                 <div>MY SHOPPING CAR</div>
-                {props.added.length > 0 && <Mail onClick={() => props.sendMail(props.added)} />}
             </div>
             <div className={classes.itemList} >
                 {list}
@@ -56,7 +55,7 @@ const Car = props => {
 
 const mapStateToProps = state => {
     return {
-        added: state.car.added
+        added: state.car.listToShop
     }
 }
 
@@ -65,7 +64,8 @@ const mapDispatchToProps = dispatch => {
         removeToCar: (name) => dispatch(actions.removeToCar(name)),
         sendMail: (car) => dispatch(actions.sendMail(car)),
         setOrder: (list, previousIndex, nextIndex) => dispatch(actions.setOrder(list, previousIndex, nextIndex)),
-        getCar: () => dispatch(actions.getCar())
+        getCar: () => dispatch(actions.getCar()),
+        goShopping: () => dispatch(actions.goShopping())
     }
 }
 

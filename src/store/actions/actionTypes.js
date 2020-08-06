@@ -30,3 +30,12 @@ export const SHOW_CAR = 'SHOW_CAR';
 
 export const SET_SOCKET = 'SET_SOCKET';
 export const SET_ORDER = 'SET_ORDER';
+
+export const GO_SHOPPING = 'GO_SHOPPING';
+export const CHECK_ITEM = 'CHECK_ITEM';
+export const CLEAR_ADDED_LIST = 'CLEAR_ADDED_LIST';
+
+export const GET_LIST = 'GET_LIST';
+export const GET_LIST_SUCCESS = 'GET_LIST_SUCCESS';
+export const INIT_LOADING = 'INIT_LOADING';
+export const END_LOADING = 'END_LOADING';

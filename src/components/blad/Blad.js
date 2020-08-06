@@ -4,6 +4,7 @@ import Background from '../UI/Background/Background';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import Items from '../UI/Items/Items';
+import ShopInStoreList from '../UI/ShopInStoreList/ShopInStoreList';
 import openSocket from 'socket.io-client';
 import ButtonUp from '../UI/Button/Button';
 import CarHandler from '../UI/Car/CarHandler';
@@ -24,32 +25,37 @@ const Blad = props => {
                 onDeleteItem(data.item);
             }
         })
-        setSocket(socket);
+        // setSocket(socket);
+        return () => socket.disconnect();
     }, [onAddItem, onDeleteItem, setSocket])
 
     useEffect(useCallback(() => {
         getItems();
     }, [getItems]), [getItems]);
 
-    useEffect(() => {
+    useEffect(useCallback(() => {
         getCar()
-    }, [getCar])
-
+    }, [getCar]), [])
 
 
     return (
         <Fragment>
             {<Background background={fondo} />}
-            {props.items && <Items />}
-            <ButtonUp />
-            <CarHandler />
+            {props.goShopping ? <ShopInStoreList /> :
+                <>
+                    {props.items && <Items />}
+                    < ButtonUp />
+                    <CarHandler />
+                </>
+            }
         </Fragment>
     )
 };
 
 const mapStateToProps = state => {
     return {
-        items: state.items.items !== null
+        items: state.items.items !== null,
+        goShopping: state.car.goShopping
     }
 }
 
