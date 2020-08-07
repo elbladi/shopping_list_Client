@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import './ImageUpload.css';
 import axios from 'axios';
 import Button from './Button';
@@ -25,14 +25,16 @@ const ImageUpload = props => {
                     setPreviewUrl(process.env.REACT_APP_API + resp.data.image);
                     setIsValid(true);
                     fileIsValid = true;
+                    props.onInput(props.id, pickedFile, fileIsValid);
                 }).catch(err => {
                     console.log(err)
                 })
         } else {
             setIsValid(false);
             fileIsValid = false;
+            props.onInput(props.id, pickedFile, fileIsValid);
+
         };
-        props.onInput(props.id, pickedFile, fileIsValid);
     };
 
     const pickImageHandler = () => {
