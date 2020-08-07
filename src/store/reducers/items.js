@@ -1,12 +1,13 @@
 import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../utility';
 const initialState = {
-    items: null,
+    items: [],
     byName: false,
     byQuantity: false,
     name: "",
     quantity: null,
-    socket: null
+    socket: null,
+    loading: false
 }
 
 const addItem = (state, action) => {
@@ -34,6 +35,7 @@ const getAllItems = (state, action) => {
         byQuantity: false,
         name: "",
         quantity: null,
+        loading: false
     };
     return updateObject(state, items);
 }
@@ -76,6 +78,18 @@ const setSocket = (state, action) => {
     })
 }
 
+const initLoading = (state, action) => {
+    return updateObject(state, {
+        loading: true
+    })
+}
+
+const endLoading = (state, action) => {
+    return updateObject(state, {
+        loading: false
+    })
+}
+
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -87,6 +101,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SEARCH_BY_QUANTITY: return searchByQuantity(state, action);
         case actionTypes.SHOW_ALL: return showAll(state, action);
         case actionTypes.SET_SOCKET: return setSocket(state, action);
+        case actionTypes.INIT_LOADING_ITEMS: return initLoading(state, action);
+        case actionTypes.END_LOADING_ITEMS: return endLoading(state, action);
         default: return state;
     };
 };

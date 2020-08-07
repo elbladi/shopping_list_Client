@@ -40,5 +40,8 @@ export const GET_LIST_SUCCESS = 'GET_LIST_SUCCESS';
 export const INIT_LOADING = 'INIT_LOADING';
 export const END_LOADING = 'END_LOADING';
 
+export const INIT_LOADING_ITEMS = 'INIT_LOADING_ITEMS';
+export const END_LOADING_ITEMS = 'END_LOADING_ITEMS';
+
 export const CLOSE_ADD_ITEM = 'CLOSE_ADD_ITEM';
 export const OPEN_ADD_ITEM = 'OPEN_ADD_ITEM';

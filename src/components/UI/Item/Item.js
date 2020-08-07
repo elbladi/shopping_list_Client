@@ -28,7 +28,7 @@ const Item = props => {
                     <div className={classes.item_ima} onClick={() => { props.showCarOptions(props.name) }} >
                         <LazyLoadImage
                             alt={props.name}
-                            src={process.env.REACT_APP_API + `/${props.userId}/${props.name}.png`}
+                            src={props.image}
                             effect='black-and-white'
                         />
                     </div>

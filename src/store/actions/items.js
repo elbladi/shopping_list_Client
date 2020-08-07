@@ -45,9 +45,22 @@ export const getItems = (items) => {
     }
 }
 
+const initLoading = () => {
+    return {
+        type: actionTypes.INIT_LOADING_ITEMS
+    }
+}
+
+const endLoading = () => {
+    return {
+        type: actionTypes.END_LOADING_ITEMS
+    }
+}
+
 
 export const getAllItems = () => {
     return dispatch => {
+        dispatch(initLoading());
         let items
         try {
             axios.get(process.env.REACT_APP_API + '/api/item/getItems')
@@ -55,9 +68,9 @@ export const getAllItems = () => {
                     items = resp.data.items;
                     dispatch(getItems(items));
                 })
-                .catch(err => { });
-        } catch (error) {
-
+                .catch(_ => dispatch(endLoading()));
+        } catch (_) {
+            dispatch(endLoading())
         }
     }
 }

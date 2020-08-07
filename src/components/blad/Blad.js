@@ -29,9 +29,9 @@ const Blad = props => {
         return () => socket.disconnect();
     }, [onAddItem, onDeleteItem])
 
-    useEffect(() => {
-        getItems();
-    }, [getItems]);
+    // useEffect(() => {
+    //     getItems();
+    // }, [getItems]);
 
     useEffect(useCallback(() => {
         getCar()
@@ -44,7 +44,7 @@ const Blad = props => {
             {props.showAddItem ? <Upload /> : (
                 props.goShopping ? <ShopInStoreList /> :
                     <>
-                        {props.items && <Items />}
+                        <Items />
                         < ButtonUp show={() => props.openAddItem()} />
                         <CarHandler />
                     </>
@@ -64,7 +64,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getItems: () => dispatch(actions.getAllItems()),
         onAddItem: (name) => dispatch(actions.add(name)),
         onDeleteItem: (name) => dispatch(actions.remove(name)),
         getCar: () => dispatch(actions.getCar()),
