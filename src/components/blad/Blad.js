@@ -8,10 +8,11 @@ import ShopInStoreList from '../UI/ShopInStoreList/ShopInStoreList';
 import openSocket from 'socket.io-client';
 import ButtonUp from '../UI/Button/Button';
 import CarHandler from '../UI/Car/CarHandler';
+import Upload from '../UI/UploadImage/Upload';
 
 const Blad = props => {
 
-    const { getItems, onAddItem, onDeleteItem, setSocket, getCar } = props;
+    const { getItems, onAddItem, onDeleteItem, getCar } = props;
 
     useEffect(() => {
         const socket = openSocket(process.env.REACT_APP_API);
@@ -25,13 +26,12 @@ const Blad = props => {
                 onDeleteItem(data.item);
             }
         })
-        // setSocket(socket);
         return () => socket.disconnect();
-    }, [onAddItem, onDeleteItem, setSocket])
+    }, [onAddItem, onDeleteItem])
 
-    useEffect(useCallback(() => {
+    useEffect(() => {
         getItems();
-    }, [getItems]), [getItems]);
+    }, [getItems]);
 
     useEffect(useCallback(() => {
         getCar()
@@ -41,12 +41,14 @@ const Blad = props => {
     return (
         <Fragment>
             {<Background background={fondo} />}
-            {props.goShopping ? <ShopInStoreList /> :
-                <>
-                    {props.items && <Items />}
-                    < ButtonUp />
-                    <CarHandler />
-                </>
+            {props.showAddItem ? <Upload /> : (
+                props.goShopping ? <ShopInStoreList /> :
+                    <>
+                        {props.items && <Items />}
+                        < ButtonUp show={() => props.openAddItem()} />
+                        <CarHandler />
+                    </>
+            )
             }
         </Fragment>
     )
@@ -55,7 +57,8 @@ const Blad = props => {
 const mapStateToProps = state => {
     return {
         items: state.items.items !== null,
-        goShopping: state.car.goShopping
+        goShopping: state.car.goShopping,
+        showAddItem: state.car.showAddItem
     }
 }
 
@@ -64,8 +67,8 @@ const mapDispatchToProps = dispatch => {
         getItems: () => dispatch(actions.getAllItems()),
         onAddItem: (name) => dispatch(actions.add(name)),
         onDeleteItem: (name) => dispatch(actions.remove(name)),
-        setSocket: (socket) => dispatch(actions.setSocket(socket)),
-        getCar: () => dispatch(actions.getCar())
+        getCar: () => dispatch(actions.getCar()),
+        openAddItem: () => dispatch(actions.openAddItem()),
     };
 };
 

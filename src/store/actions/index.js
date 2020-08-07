@@ -34,5 +34,8 @@ export {
     goShopping,
     checkItem,
     clearAddedList,
-    getList
+    getList,
+    uploadNewItem,
+    closeAddItem,
+    openAddItem
 } from './car';

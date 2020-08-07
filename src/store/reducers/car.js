@@ -9,7 +9,8 @@ const initialState = {
     showCar: false,
     goShopping: false,
     loading: false,
-    listToShop: []
+    listToShop: [],
+    showAddItem: false
 }
 
 const showCarOptions = (state, action) => {
@@ -113,6 +114,19 @@ const getListSuccess = (state, action) => {
     });
 }
 
+const closeAddItem = (state, action) => {
+    return updateObject(state, {
+        loading: false,
+        showAddItem: false
+    });
+}
+
+const openAddItem = (state, action) => {
+    return updateObject(state, {
+        showAddItem: true
+    });
+}
+
 
 const reducer = (state = initialState, action) => {
 
@@ -131,6 +145,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.INIT_LOADING: return initLoading(state, action);
         case actionTypes.END_LOADING: return endLoading(state, action);
         case actionTypes.GET_LIST_SUCCESS: return getListSuccess(state, action);
+        case actionTypes.CLOSE_ADD_ITEM: return closeAddItem(state, action);
+        case actionTypes.OPEN_ADD_ITEM: return openAddItem(state, action);
         default: return state;
     }
 

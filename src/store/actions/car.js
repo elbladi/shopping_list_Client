@@ -190,3 +190,30 @@ export const getList = () => {
         }, 1000)
     }
 }
+
+export const closeAddItem = () => {
+    return {
+        type: actionTypes.CLOSE_ADD_ITEM
+    }
+}
+
+
+export const openAddItem = () => {
+    return {
+        type: actionTypes.OPEN_ADD_ITEM
+    }
+}
+
+export const uploadNewItem = (formData, keep = false) => {
+    return dispatch => {
+        dispatch(initLoading());
+        axios.post(process.env.REACT_APP_API + '/api/item/uploadItem', formData)
+            .then(_ => {
+                if (!keep) dispatch(closeAddItem())
+                else dispatch(endLoading());
+            }).catch(err => {
+                dispatch(endLoading());
+            })
+
+    }
+}
