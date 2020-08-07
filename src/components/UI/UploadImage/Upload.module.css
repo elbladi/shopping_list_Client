@@ -1,0 +1,72 @@
+.addNewItem {
+  height: calc(100vh - 200px);
+}
+
+.card {
+  position: relative;
+  margin: 6% auto;
+  flex-direction: column;
+  display: flex;
+  height: 500px;
+  min-height: 500px;
+  width: 80%;
+  background-color: white;
+  box-shadow: inset 0px 4px 28px #4f4f4f;
+  border-radius: 15px;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.nameInput {
+  display: flex;
+  justify-content: center;
+  margin: 20% 0;
+}
+
+.input {
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  width: 80%;
+  text-align: start;
+  font-family: Merienda;
+  padding-left: 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.button {
+  font-family: Merienda;
+  border: 1px solid;
+  padding: 0 10px;
+  margin: 0 5px;
+  font-size: 0.8rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.disabled {
+  color: #ccc;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.loading img {
+  height: 50%;
+  margin: 50% 0;
+}

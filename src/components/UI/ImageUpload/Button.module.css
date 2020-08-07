@@ -1,0 +1,19 @@
+.Button {
+  background-color: transparent;
+  color: black;
+  outline: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 3px 10px;
+  margin: 10px;
+  font-size: 1rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  border: 1px solid black;
+  font-family: Merienda;
+}
+
+.Button:disabled {
+  color: #000;
+  cursor: not-allowed;
+}

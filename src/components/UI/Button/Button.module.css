@@ -3,12 +3,14 @@
     bottom: 8px;
     height: 38px;
     box-sizing: border-box;
-    transform: rotate(180deg);
     fill: white;
     width: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
 .up svg {
     height: 100%;
     width: 15%;
+    transform: rotate(180deg);
 }

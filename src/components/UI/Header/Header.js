@@ -29,7 +29,6 @@ const Header = (props) => {
         props.onLogout();
         props.onSetItems();
         props.onLogoutFilter();
-        props.socket.disconnect();
     }
 
     const changeFilter = (event) => {
