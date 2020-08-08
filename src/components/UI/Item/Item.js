@@ -21,7 +21,7 @@ const Item = props => {
     return (
         <Fragment>
             <div className={[classes.item_container, classes[fontColor]].join(' ')}  >
-                {!props.loading && <button className={classes.item_add} onClick={() => { props.onAddItem(props.name) }}>
+                {!props.loading && <button className={classes.item_add} onClick={() => { props.onAddItem(props.id) }}>
                     <Add />
                 </button>}
                 <div className={classes.item_ima_count}>
@@ -53,7 +53,7 @@ const Item = props => {
                         {props.amount}
                     </div>}
                 </div>
-                {!props.loading && <button disabled={props.amount < 1} className={classes.item_delete} onClick={() => { props.onDeleteItem(props.name) }}>
+                {!props.loading && <button disabled={props.amount < 1} className={classes.item_delete} onClick={() => { props.onDeleteItem(props.id) }}>
                     <img src={Delete} alt="Delete" />
                 </button>}
             </div>
@@ -74,8 +74,8 @@ const mapDispatchToProps = dispatch => {
     return {
         showCarOptions: (name) => { dispatch(actions.showCarOptions(name)) },
         closeCarOptions: () => { dispatch(actions.closeCarOptions()) },
-        onDeleteItem: (name) => { dispatch(actions.deleteItem(name)) },
-        onAddItem: (name) => dispatch(actions.addItem(name)),
+        onDeleteItem: (itemId) => { dispatch(actions.deleteItem(itemId)) },
+        onAddItem: (id) => dispatch(actions.addItem(id)),
         setToDeleteItem: (itemId) => dispatch(actions.onDeleteItem(itemId)),
         deleteItemContent: (itemId, name) => dispatch(actions.deleteItemContent(itemId, name))
     };

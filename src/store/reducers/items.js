@@ -13,21 +13,37 @@ const initialState = {
 }
 
 const addItem = (state, action) => {
-    const item = { [action.name]: state.items[action.name] + 1 };
-    const newItems = updateObject(state.items, item);
-    const updState = {
-        items: newItems
-    };
-    return updateObject(state, updState);
+    const itemId = action.itemId;
+
+    const newItem = {
+        ...state.items[itemId]
+    }
+    newItem.count += 1;
+
+    const tempItems = { ...state.items };
+    delete (tempItems[itemId])
+    tempItems[itemId] = { ...newItem };
+
+    return updateObject(state, {
+        items: tempItems
+    });
 }
 
 const deleteItem = (state, action) => {
-    const item = { [action.name]: state.items[action.name] - 1 };
-    const newItems = updateObject(state.items, item);
-    const updState = {
-        items: newItems
-    };
-    return updateObject(state, updState);
+    const itemId = action.itemId;
+
+    const newItem = {
+        ...state.items[itemId]
+    }
+    newItem.count -= 1;
+
+    const tempItems = { ...state.items };
+    delete (tempItems[itemId])
+    tempItems[itemId] = { ...newItem };
+
+    return updateObject(state, {
+        items: tempItems
+    });
 }
 
 const getAllItems = (state, action) => {

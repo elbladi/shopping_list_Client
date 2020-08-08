@@ -18,21 +18,17 @@ const Blad = props => {
     useEffect(() => {
         const socket = openSocket(process.env.REACT_APP_API);
         socket.on('added', data => {
-            if (data.item !== null) {
-                onAddItem(data.item);
+            if (data.itemId !== null) {
+                onAddItem(data.itemId);
             }
         });
         socket.on('deleted', data => {
-            if (data.item !== null) {
-                onDeleteItem(data.item);
+            if (data.itemId !== null) {
+                onDeleteItem(data.itemId);
             }
         })
         return () => socket.disconnect();
     }, [onAddItem, onDeleteItem])
-
-    // useEffect(() => {
-    //     getItems();
-    // }, [getItems]);
 
     useEffect(useCallback(() => {
         getCar()
@@ -67,8 +63,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddItem: (name) => dispatch(actions.add(name)),
-        onDeleteItem: (name) => dispatch(actions.remove(name)),
+        onAddItem: (itemId) => dispatch(actions.add(itemId)),
+        onDeleteItem: (itemId) => dispatch(actions.remove(itemId)),
         getCar: () => dispatch(actions.getCar()),
         openAddItem: () => dispatch(actions.openAddItem()),
         deleteCancel: () => dispatch(actions.onDeleteItemCancel())

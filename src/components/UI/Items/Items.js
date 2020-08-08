@@ -13,48 +13,48 @@ const Items = props => {
         getItems();
     }, [getItems])
 
+    const compare = (a, b) => {
+        const nameA = a.name.toUpperCase();
+        const nameB = b.name.toUpperCase();
+
+        let comparison = 0;
+        if (nameA > nameB) {
+            comparison = 1;
+        } else if (nameA < nameB) {
+            comparison = -1;
+        }
+        return comparison;
+    }
 
     let itemList;
     if (props.items) {
-        itemList = { ...props.items };
+        itemList = Object.keys(props.items).map(item => {
+            return {
+                id: item,
+                name: props.items[item].name,
+                count: props.items[item].count,
+            }
+        })
+        if (props.byName)
+            itemList = itemList.filter(item => item.name.toLowerCase().includes(props.name.toLowerCase()))
 
-        if (props.byName) {
-            let tempList = {};
-            Object.keys(itemList).filter(item => {
-                if (itemList[item].name.toLowerCase().includes(props.name.toLowerCase())) {
-                    tempList = {
-                        ...tempList,
-                        [item]: { ...itemList[item] }
-                    }
-                }
-            })
-            itemList = { ...tempList };
-        }
 
-        if (props.byQuantity) {
-            let tempList = {};
-            Object.keys(itemList).filter(item => {
-                if (itemList[item].count === parseInt(props.quantity)) {
-                    tempList = {
-                        ...tempList,
-                        [item]: { ...itemList[item] }
-                    }
-                }
-            })
-            itemList = { ...tempList };
-        }
+        if (props.byQuantity)
+            itemList = itemList.filter(item => item.count === parseInt(props.quantity))
+
+        itemList.sort(compare)
     }
 
     return (
         <div className={classes.items}>
             {props.loading && <div className={classes.spinner} ><img src={loading} alt='Loading' /></div>}
-            {Object.keys(itemList).map(item => {
+            {itemList.map(item => {
                 const deleteItem = item === itemIdToDelete;
                 return <Item
-                    key={item}
-                    id={item}
-                    name={props.items[item].name}
-                    amount={props.items[item].count}
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    amount={item.count}
                     selectedToDelete={deleteItem}
                 />
             })}

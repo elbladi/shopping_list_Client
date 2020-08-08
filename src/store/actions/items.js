@@ -1,36 +1,33 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios';
 
-export const add = (name) => {
+export const add = (itemId) => {
     return {
         type: actionTypes.ADD_ITEM,
-        name: name
+        itemId
     }
 }
 
-export const addItem = (name, user) => {
+export const addItem = (itemId) => {
     return dispatch => {
         try {
-            axios.patch(process.env.REACT_APP_API + '/api/item/addItem',
-                { itemName: name });
-        } catch (error) {
-
-        }
+            axios.patch(process.env.REACT_APP_API + '/api/item/addItem', { itemId });
+        } catch (_) { }
     }
 };
 
-export const remove = (name) => {
+export const remove = (itemId) => {
     return {
         type: actionTypes.DELETE_ITEM,
-        name: name
+        itemId
     };
 }
 
-export const deleteItem = (name, user) => {
+export const deleteItem = (itemId) => {
     return dispatch => {
         try {
             axios.patch(process.env.REACT_APP_API + '/api/item/deleteItem',
-                { itemName: name });
+                { itemId });
         } catch (error) {
 
         }
