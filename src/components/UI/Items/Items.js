@@ -7,7 +7,7 @@ import loading from '../../../Login/loading.gif';
 
 const Items = props => {
 
-    const { getItems } = props;
+    const { getItems, itemIdToDelete } = props;
 
     useEffect(() => {
         getItems();
@@ -33,14 +33,15 @@ const Items = props => {
 
     return (
         <div className={classes.items}>
-            {props.loading && <img src={loading} alt='Loading' /> }
-            {props.items.map(item => {
-                console.log(item);
+            {props.loading && <div className={classes.spinner} ><img src={loading} alt='Loading' /></div>}
+            {Object.keys(props.items).map(item => {
+                const deleteItem = item === itemIdToDelete;
                 return <Item
-                    key={item.name}
-                    name={item.name}
-                    amount={item.count}
-                    image={item.imageUrl}
+                    key={item}
+                    id={item}
+                    name={props.items[item].name}
+                    amount={props.items[item].count}
+                    selectedToDelete={deleteItem}
                 />
             })}
         </div>
@@ -54,7 +55,8 @@ const mapStateToProps = state => {
         byQuantity: state.items.byQuantity,
         name: state.items.name,
         quantity: state.items.quantity,
-        loading: state.items.loading
+        loading: state.items.loading,
+        itemIdToDelete: state.items.itemIdToDelete
     };
 };
 

@@ -14,7 +14,10 @@ export {
     searchByName,
     searchByQuantity,
     showAll,
-    setSocket
+    setSocket,
+    onDeleteItem,
+    onDeleteItemCancel,
+    deleteItemContent
 } from './items';
 
 export {

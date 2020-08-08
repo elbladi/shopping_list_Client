@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useCallback } from 'react';
 import fondo from './assets/fondo.png';
 import Background from '../UI/Background/Background';
+import Backdrop from '../UI/Backdrop/Backdrop';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import Items from '../UI/Items/Items';
@@ -12,7 +13,7 @@ import Upload from '../UI/UploadImage/Upload';
 
 const Blad = props => {
 
-    const { getItems, onAddItem, onDeleteItem, getCar } = props;
+    const { getItems, onAddItem, onDeleteItem, getCar, deleteItem, deleteCancel } = props;
 
     useEffect(() => {
         const socket = openSocket(process.env.REACT_APP_API);
@@ -41,6 +42,7 @@ const Blad = props => {
     return (
         <Fragment>
             {<Background background={fondo} />}
+            {deleteItem && <Backdrop show={deleteItem} clicked={() => deleteCancel()} />}
             {props.showAddItem ? <Upload /> : (
                 props.goShopping ? <ShopInStoreList /> :
                     <>
@@ -58,7 +60,8 @@ const mapStateToProps = state => {
     return {
         items: state.items.items !== null,
         goShopping: state.car.goShopping,
-        showAddItem: state.car.showAddItem
+        showAddItem: state.car.showAddItem,
+        deleteItem: state.items.deleteItem
     }
 }
 
@@ -68,6 +71,7 @@ const mapDispatchToProps = dispatch => {
         onDeleteItem: (name) => dispatch(actions.remove(name)),
         getCar: () => dispatch(actions.getCar()),
         openAddItem: () => dispatch(actions.openAddItem()),
+        deleteCancel: () => dispatch(actions.onDeleteItemCancel())
     };
 };
 

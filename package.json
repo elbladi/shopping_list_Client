@@ -10,6 +10,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-lazy-load-image-component": "^1.4.3",
+    "react-long": "^1.1.9",
     "react-redux": "^7.2.0",
     "react-reorder": "^3.0.0-alpha.7",
     "react-router-dom": "^5.1.2",

@@ -1,12 +1,24 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import './ImageUpload.css';
-import axios from 'axios';
 import Button from './Button';
 
 const ImageUpload = props => {
     const filePickerRef = useRef();
+    const [file, setFile] = useState();
     const [previewUrl, setPreviewUrl] = useState();
     const [isValid, setIsValid] = useState(false);
+
+    useEffect(() => {
+        if (!file) {
+            return;
+        };
+
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+            setPreviewUrl(fileReader.result);
+        };
+        fileReader.readAsDataURL(file);
+    }, [file]);
 
 
     const pickedHandler = event => {
@@ -14,27 +26,14 @@ const ImageUpload = props => {
         let fileIsValid = isValid;
         if (event.target.files && event.target.files.length === 1) {
             pickedFile = event.target.files[0];
-
-            const formData = new FormData();
-            formData.append('name', 'imageName');
-            formData.append('user', 'tempImg');
-            formData.append('image', pickedFile);
-
-            axios.post(process.env.REACT_APP_API + '/api/item/removeBackground', formData)
-                .then(resp => {
-                    setPreviewUrl(process.env.REACT_APP_API + resp.data.image);
-                    setIsValid(true);
-                    fileIsValid = true;
-                    props.onInput(props.id, pickedFile, fileIsValid);
-                }).catch(err => {
-                    console.log(err)
-                })
+            setFile(pickedFile);
+            setIsValid(true);
+            fileIsValid = true;
         } else {
             setIsValid(false);
             fileIsValid = false;
-            props.onInput(props.id, pickedFile, fileIsValid);
-
         };
+        props.onInput(props.id, pickedFile, fileIsValid);
     };
 
     const pickImageHandler = () => {

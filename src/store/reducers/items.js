@@ -7,7 +7,9 @@ const initialState = {
     name: "",
     quantity: null,
     socket: null,
-    loading: false
+    loading: false,
+    deleteItem: false,
+    itemIdToDelete: '',
 }
 
 const addItem = (state, action) => {
@@ -90,6 +92,31 @@ const endLoading = (state, action) => {
     })
 }
 
+const onDeleteItem = (state, action) => {
+    return updateObject(state, {
+        deleteItem: true,
+        itemIdToDelete: action.itemId
+    })
+}
+
+const onDeleteItemCancel = (state, action) => {
+    return updateObject(state, {
+        deleteItem: false,
+        itemIdToDelete: ''
+    })
+}
+
+const onDeleteContent = (state, action) => {
+    let itemsCopy = { ...state.items };
+    delete (itemsCopy[action.itemId]);
+
+    return updateObject(state, {
+        deleteItem: false,
+        itemIdToDelete: '',
+        items: itemsCopy
+    })
+}
+
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -103,6 +130,10 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SET_SOCKET: return setSocket(state, action);
         case actionTypes.INIT_LOADING_ITEMS: return initLoading(state, action);
         case actionTypes.END_LOADING_ITEMS: return endLoading(state, action);
+        case actionTypes.ON_DELETE_ITEM: return onDeleteItem(state, action);
+        case actionTypes.ON_DELETE_ITEM_CANCEL: return onDeleteItemCancel(state, action);
+        case actionTypes.DELETE_ITEM_CONTENT: return onDeleteContent(state, action);
+
         default: return state;
     };
 };

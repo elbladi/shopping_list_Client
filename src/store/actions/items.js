@@ -65,7 +65,7 @@ export const getAllItems = () => {
         try {
             axios.get(process.env.REACT_APP_API + '/api/item/getItems')
                 .then(resp => {
-                    items = resp.data.items;
+                    items = resp.data;
                     dispatch(getItems(items));
                 })
                 .catch(_ => dispatch(endLoading()));
@@ -106,4 +106,36 @@ export const setSocket = (socket) => {
         type: actionTypes.SET_SOCKET,
         socket: socket
     }
-} 
+}
+
+export const onDeleteItem = (itemId) => {
+    return {
+        type: actionTypes.ON_DELETE_ITEM,
+        itemId
+    }
+}
+
+export const onDeleteItemCancel = () => {
+    return {
+        type: actionTypes.ON_DELETE_ITEM_CANCEL
+    }
+}
+
+const onDeleteContent = (itemId) => {
+    return {
+        type: actionTypes.DELETE_ITEM_CONTENT,
+        itemId
+    }
+}
+
+export const deleteItemContent = (itemId, name) => {
+    return dispatch => {
+        dispatch(initLoading());
+        axios.patch(process.env.REACT_APP_API + '/api/item/deleteContent', { itemId, name })
+            .then(resp => {
+                if (resp.status === 200) dispatch(onDeleteContent(itemId))
+                dispatch(endLoading());
+            })
+            .catch(_ => dispatch(endLoading()))
+    }
+}
