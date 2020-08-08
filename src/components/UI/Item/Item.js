@@ -6,14 +6,12 @@ import { connect } from 'react-redux';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import * as actions from '../../../store/actions';
 import 'react-lazy-load-image-component/src/effects/black-and-white.css';
-// import useLongPress from '../../hooks/useLongPress';
 import { ReactComponent as DeleteSvg } from '../assets/delete.svg';
 import LongPress from 'react-long';
 import Spinner from '../../../Login/loading.gif';
 
 const Item = props => {
 
-    // const backspaceLongPress = useLongPress(() => props.setToDeleteItem(props.id), 300);
     let fontColor;
     if (props.userId === 'bladi') {
         fontColor = 'from_blad';

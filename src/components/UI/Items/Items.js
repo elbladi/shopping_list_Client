@@ -14,27 +14,41 @@ const Items = props => {
     }, [getItems])
 
 
-    // if (props.items) {
-    //     console.log(props.items);
-    //     itemList = props.items.map(item => {
-    //         return { name: item, q: props.items[item] };
-    //     });
+    let itemList;
+    if (props.items) {
+        itemList = { ...props.items };
 
-    //     if (props.byName) {
-    //         itemList = itemList.filter(item => item.name.includes(props.name.toLowerCase()))
-    //     }
+        if (props.byName) {
+            let tempList = {};
+            Object.keys(itemList).filter(item => {
+                if (itemList[item].name.toLowerCase().includes(props.name.toLowerCase())) {
+                    tempList = {
+                        ...tempList,
+                        [item]: { ...itemList[item] }
+                    }
+                }
+            })
+            itemList = { ...tempList };
+        }
 
-    //     if (props.byQuantity) {
-    //         itemList = itemList.filter(item => item.q === parseInt(props.quantity))
-    //     }
-    // }
-
-
+        if (props.byQuantity) {
+            let tempList = {};
+            Object.keys(itemList).filter(item => {
+                if (itemList[item].count === parseInt(props.quantity)) {
+                    tempList = {
+                        ...tempList,
+                        [item]: { ...itemList[item] }
+                    }
+                }
+            })
+            itemList = { ...tempList };
+        }
+    }
 
     return (
         <div className={classes.items}>
             {props.loading && <div className={classes.spinner} ><img src={loading} alt='Loading' /></div>}
-            {Object.keys(props.items).map(item => {
+            {Object.keys(itemList).map(item => {
                 const deleteItem = item === itemIdToDelete;
                 return <Item
                     key={item}
