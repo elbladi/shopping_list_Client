@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ReactComponent as Checked } from '../assets/checked.svg';
 import { ReactComponent as Unchecked } from '../assets/unchecked.svg';
 import classes from './ShopInStoreList.module.css';
@@ -10,15 +10,8 @@ import { connect } from 'react-redux';
 const ShopInStoreList = props => {
 
     const onReorder = (event, previousIndex, nextIndex, fromId, toId) => {
-        props.setOrder(props.listToShop, previousIndex, nextIndex)
+        props.setOrder(props.listToShop, previousIndex, nextIndex, props.carId)
     }
-
-    const { getList } = props;
-
-    useEffect(() => {
-        getList();
-    }, [getList])
-
     let list = '';
     if (props.listToShop.length > 0) {
         list = <Reorder
@@ -45,7 +38,7 @@ const ShopInStoreList = props => {
         let checkedItems = props.listToShop.find(item => item.checked === true)
         if (!checkedItems) return;
 
-        props.clearAddedList(props.listToShop)
+        props.clearAddedList(props.listToShop, props.carId)
     }
 
     return (
@@ -68,19 +61,18 @@ const ShopInStoreList = props => {
 
 const mapStateToProps = state => {
     return {
-        added: state.car.added,
         loading: state.car.loading,
-        listToShop: state.car.listToShop
+        listToShop: state.car.listToShop,
+        carId: state.car.carId,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         goShopping: () => dispatch(actions.goShopping()),
-        getList: () => dispatch(actions.getList()),
         checkItem: (name) => dispatch(actions.checkItem(name)),
-        clearAddedList: (added) => dispatch(actions.clearAddedList(added)),
-        setOrder: (list, previousIndex, nextIndex) => dispatch(actions.setOrder(list, previousIndex, nextIndex)),
+        clearAddedList: (added, carId) => dispatch(actions.clearAddedList(added, carId)),
+        setOrder: (list, previousIndex, nextIndex, carId) => dispatch(actions.setOrder(list, previousIndex, nextIndex, carId)),
     }
 }
 

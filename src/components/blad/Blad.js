@@ -13,7 +13,7 @@ import Upload from '../UI/UploadImage/Upload';
 
 const Blad = props => {
 
-    const { getItems, onAddItem, onDeleteItem, getCar, deleteItem, deleteCancel } = props;
+    const { carId, onAddItem, onDeleteItem, getCar, deleteItem, deleteCancel } = props;
 
     useEffect(() => {
         const socket = openSocket(process.env.REACT_APP_API);
@@ -29,6 +29,10 @@ const Blad = props => {
         })
         return () => socket.disconnect();
     }, [onAddItem, onDeleteItem])
+
+    useEffect(useCallback(() => {
+        getCar(carId)
+    }, [getCar, carId]))
 
     return (
         <Fragment>
@@ -52,7 +56,8 @@ const mapStateToProps = state => {
         items: state.items.items !== null,
         goShopping: state.car.goShopping,
         showAddItem: state.car.showAddItem,
-        deleteItem: state.items.deleteItem
+        deleteItem: state.items.deleteItem,
+        carId: state.car.carId
     }
 }
 
@@ -60,7 +65,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onAddItem: (itemId) => dispatch(actions.add(itemId)),
         onDeleteItem: (itemId) => dispatch(actions.remove(itemId)),
-        getCar: () => dispatch(actions.getCar()),
+        getCar: (carId) => dispatch(actions.getCar(carId)),
         openAddItem: () => dispatch(actions.openAddItem()),
         deleteCancel: () => dispatch(actions.onDeleteItemCancel())
     };

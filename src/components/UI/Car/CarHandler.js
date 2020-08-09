@@ -18,7 +18,7 @@ const Car = (props) => {
             <Backdrop show={props.showCar} clicked={() => props.onCloseCarOptions()} />
             <div className={[classes.images, classes[isVisible]].join(' ')} >
                 {!props.exist && <Add onClick={() => props.onAddToCar(props.selectedItem)} />}
-                {props.exist && <Del onClick={() => props.onRemoveToCar(props.selectedItem)} />}
+                {props.exist && <Del onClick={() => props.onRemoveToCar(props.selectedItem, props.carId)} />}
             </div>
         </Fragment>
     )
@@ -29,14 +29,15 @@ const mapStateToProps = state => {
         showCar: state.car.showCarOptions,
         selectedItem: state.car.selected,
         carList: state.car.added,
-        exist: state.car.existInList
+        exist: state.car.existInList,
+        carId: state.car.carId
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         onAddToCar: (name) => dispatch(actions.addToCar(name)),
-        onRemoveToCar: (name) => dispatch(actions.removeToCar(name)),
+        onRemoveToCar: (name, carId) => dispatch(actions.removeToCar(name, carId)),
         onCloseCarOptions: () => dispatch(actions.closeCarOptions())
     }
 }

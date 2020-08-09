@@ -33,7 +33,10 @@ const addToCar = (state, action) => {
         checked: false
     }
     newState.push(item);
-    return updateObject(state, { listToShop: newState })
+    return updateObject(state, {
+        listToShop: newState,
+        carId: action.docId
+    })
 }
 
 const removeToCar = (state, action) => {
@@ -49,7 +52,6 @@ const closeCarOptions = (state, action) => {
 }
 
 const getCar = (state, action) => {
-    console.log(action.carId)
     return updateObject(state, {
         listToShop: action.car,
         carId: action.carId
@@ -94,7 +96,8 @@ const checkItem = (state, action) => {
 const clearAddedList = (state, action) => {
     return updateObject(state, {
         listToShop: action.list,
-        goShopping: false
+        goShopping: false,
+        carId: action.carId
     });
 }
 

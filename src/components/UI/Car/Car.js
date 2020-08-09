@@ -10,7 +10,7 @@ const Car = props => {
     const { getCar, carId } = props;
     useEffect(() => {
         getCar(carId);
-    }, [getCar])
+    }, [getCar, carId])
 
     const onReorder = (event, previousIndex, nextIndex, fromId, toId) => {
         props.setOrder(props.added, previousIndex, nextIndex, carId)
@@ -31,7 +31,7 @@ const Car = props => {
                 return (
                     <div key={item.name} className={classes.item} >
                         <div className={classes.itemName} >{itemName}</div>
-                        <Delete onClick={() => props.removeToCar(item.name)} />
+                        <Delete onClick={() => props.removeToCar(item.name, carId)} />
                     </div>
                 )
             })}
@@ -62,7 +62,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        removeToCar: (name) => dispatch(actions.removeToCar(name)),
+        removeToCar: (name, carId) => dispatch(actions.removeToCar(name, carId)),
         sendMail: (car) => dispatch(actions.sendMail(car)),
         setOrder: (list, previousIndex, nextIndex, carId) => dispatch(actions.setOrder(list, previousIndex, nextIndex, carId)),
         getCar: (carId) => dispatch(actions.getCar(carId)),

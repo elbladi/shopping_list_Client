@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import classes from './Item.module.css';
 import { ReactComponent as Add } from '../assets/plus.svg';
 import Delete from '../assets/remove.png';

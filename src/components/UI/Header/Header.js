@@ -31,8 +31,8 @@ const Header = (props) => {
         props.onLogoutFilter();
     }
 
-    const changeFilter = (event) => {
-        event.preventDefault();
+    const changeFilter = (event = null) => {
+        if (event) event.preventDefault();
         setShowFilter(!showFilter);
         props.onHandleFilter();
     }
@@ -55,6 +55,7 @@ const Header = (props) => {
             <div className={classes.header}>
                 <div className={classes.close} onClick={(event) => logout(event)} > {logoutIcon} </div>
                 <span onClick={() => handleClickInHeader()} >My Shopping list</span>
+                {showFilter && <Backdrop show={showFilter} clicked={() => changeFilter()} />}
                 <FilterOptions visible={showFilter} click={(event) => changeFilter(event)} />
                 {!showFilter && <div onClick={(event) => changeFilter(event)} className={classes.icon}> {Icon} </div>}
             </div>
