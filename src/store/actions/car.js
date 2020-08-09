@@ -55,19 +55,20 @@ export const closeCarOptions = () => {
     }
 }
 
-export const setCar = (car) => {
+export const setCar = (car, carId) => {
     return {
         type: actionTypes.GET_CAR,
-        car: car
+        car,
+        carId
     }
 }
 
-export const getCar = () => {
+export const getCar = carId => {
     return dispatch => {
 
-        axios.get(process.env.REACT_APP_API + '/api/item/getCar')
+        axios.get(process.env.REACT_APP_API + `/api/item/getCar/${carId}`)
             .then(resp => {
-                if (resp.data.car) dispatch(setCar(resp.data.car));
+                if (resp.data) dispatch(setCar(resp.data.car, resp.data.carId));
                 else dispatch(setCar([]));
             })
             .catch(err => { })
@@ -109,11 +110,12 @@ const changeOrder = (newArray) => {
     }
 }
 
-export const setOrder = (list, previousIndex, nextIndex) => {
+export const setOrder = (list, previousIndex, nextIndex, carId ) => {
     return dispatch => {
         const newArray = reorder(list, previousIndex, nextIndex)
+        console.log(carId);
 
-        axios.post(process.env.REACT_APP_API + '/api/item/setOrder', newArray)
+        axios.post(process.env.REACT_APP_API + '/api/item/setOrder', {carId, newArray})
             .then(_ => { })
             .catch(err => console.log(err));
 

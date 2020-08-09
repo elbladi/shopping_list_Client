@@ -10,7 +10,8 @@ const initialState = {
     goShopping: false,
     loading: false,
     listToShop: [],
-    showAddItem: false
+    showAddItem: false,
+    carId: 0
 }
 
 const showCarOptions = (state, action) => {
@@ -48,8 +49,10 @@ const closeCarOptions = (state, action) => {
 }
 
 const getCar = (state, action) => {
+    console.log(action.carId)
     return updateObject(state, {
-        listToShop: action.car
+        listToShop: action.car,
+        carId: action.carId
     })
 }
 

@@ -7,13 +7,13 @@ import * as actions from '../../../store/actions';
 import { connect } from 'react-redux';
 
 const Car = props => {
-    const { getCar } = props;
+    const { getCar, carId } = props;
     useEffect(() => {
-        getCar();
+        getCar(carId);
     }, [getCar])
 
     const onReorder = (event, previousIndex, nextIndex, fromId, toId) => {
-        props.setOrder(props.added, previousIndex, nextIndex)
+        props.setOrder(props.added, previousIndex, nextIndex, carId)
     }
 
     let list = '';
@@ -55,7 +55,8 @@ const Car = props => {
 
 const mapStateToProps = state => {
     return {
-        added: state.car.listToShop
+        added: state.car.listToShop,
+        carId: state.car.carId
     }
 }
 
@@ -63,8 +64,8 @@ const mapDispatchToProps = dispatch => {
     return {
         removeToCar: (name) => dispatch(actions.removeToCar(name)),
         sendMail: (car) => dispatch(actions.sendMail(car)),
-        setOrder: (list, previousIndex, nextIndex) => dispatch(actions.setOrder(list, previousIndex, nextIndex)),
-        getCar: () => dispatch(actions.getCar()),
+        setOrder: (list, previousIndex, nextIndex, carId) => dispatch(actions.setOrder(list, previousIndex, nextIndex, carId)),
+        getCar: (carId) => dispatch(actions.getCar(carId)),
         goShopping: () => dispatch(actions.goShopping())
     }
 }

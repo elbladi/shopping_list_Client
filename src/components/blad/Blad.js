@@ -30,11 +30,6 @@ const Blad = props => {
         return () => socket.disconnect();
     }, [onAddItem, onDeleteItem])
 
-    useEffect(useCallback(() => {
-        getCar()
-    }, [getCar]), [])
-
-
     return (
         <Fragment>
             {<Background background={fondo} />}
