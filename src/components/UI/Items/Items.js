@@ -49,7 +49,7 @@ const Items = props => {
         <div className={classes.items}>
             {props.loading && <div className={classes.spinner} ><img src={loading} alt='Loading' /></div>}
             {itemList.map(item => {
-                const deleteItem = item === itemIdToDelete;
+                const deleteItem = item.id === itemIdToDelete;
                 return <Item
                     key={item.id}
                     id={item.id}
