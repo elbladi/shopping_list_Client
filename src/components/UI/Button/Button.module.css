@@ -12,5 +12,8 @@
 .up svg {
     height: 100%;
     width: 15%;
+}
+
+.up svg:last-child {
     transform: rotate(180deg);
 }

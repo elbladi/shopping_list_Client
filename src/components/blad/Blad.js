@@ -13,7 +13,14 @@ import Upload from '../UI/UploadImage/Upload';
 
 const Blad = props => {
 
-    const { carId, onAddItem, onDeleteItem, getCar, deleteItem, deleteCancel } = props;
+    const { carId,
+        onAddItem,
+        onDeleteItem,
+        getCar,
+        deleteItem,
+        deleteCancel,
+        onDeleteContent,
+        undoDelete } = props;
 
     useEffect(() => {
         const socket = openSocket(process.env.REACT_APP_API);
@@ -27,8 +34,18 @@ const Blad = props => {
                 onDeleteItem(data.itemId);
             }
         })
+        socket.on('deleteContent', data => {
+            if (data.itemId !== null) {
+                onDeleteContent(data.itemId);
+            }
+        })
+        socket.on('undoDeleteItem', data => {
+            if (data.newItemId !== null) {
+                undoDelete(data.name, data.newItemId);
+            }
+        })
         return () => socket.disconnect();
-    }, [onAddItem, onDeleteItem])
+    }, [onAddItem, onDeleteItem, onDeleteContent, undoDelete])
 
     useEffect(useCallback(() => {
         getCar(carId)
@@ -42,7 +59,11 @@ const Blad = props => {
                 props.goShopping ? <ShopInStoreList /> :
                     <>
                         <Items />
-                        < ButtonUp show={() => props.openAddItem()} />
+                        < ButtonUp
+                            show={() => props.openAddItem()}
+                            undo={props.deletedItem ? true : false}
+                            clicked={() => props.undoButtonClicked(props.deletedItem.name)}
+                        />
                         <CarHandler />
                     </>
             )
@@ -57,7 +78,8 @@ const mapStateToProps = state => {
         goShopping: state.car.goShopping,
         showAddItem: state.car.showAddItem,
         deleteItem: state.items.deleteItem,
-        carId: state.car.carId
+        carId: state.car.carId,
+        deletedItem: state.items.deletedItem,
     }
 }
 
@@ -67,7 +89,10 @@ const mapDispatchToProps = dispatch => {
         onDeleteItem: (itemId) => dispatch(actions.remove(itemId)),
         getCar: (carId) => dispatch(actions.getCar(carId)),
         openAddItem: () => dispatch(actions.openAddItem()),
-        deleteCancel: () => dispatch(actions.onDeleteItemCancel())
+        deleteCancel: () => dispatch(actions.onDeleteItemCancel()),
+        undoButtonClicked: (deletedItem) => dispatch(actions.undoButtonClicked(deletedItem)),
+        onDeleteContent: (itemId) => dispatch(actions.onDeleteContent(itemId)),
+        undoDelete: (name, id) => dispatch(actions.undoDelete(name, id)),
     };
 };
 

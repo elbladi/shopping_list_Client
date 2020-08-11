@@ -17,7 +17,10 @@ export {
     setSocket,
     onDeleteItem,
     onDeleteItemCancel,
-    deleteItemContent
+    deleteItemContent,
+    undoButtonClicked,
+    onDeleteContent,
+    undoDelete
 } from './items';
 
 export {

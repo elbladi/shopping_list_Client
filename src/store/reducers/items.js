@@ -10,6 +10,7 @@ const initialState = {
     loading: false,
     deleteItem: false,
     itemIdToDelete: '',
+    deletedItem: null,
 }
 
 const addItem = (state, action) => {
@@ -53,7 +54,8 @@ const getAllItems = (state, action) => {
         byQuantity: false,
         name: "",
         quantity: null,
-        loading: false
+        loading: false,
+        deletedItem: action.deleted
     };
     return updateObject(state, items);
 }
@@ -124,12 +126,31 @@ const onDeleteItemCancel = (state, action) => {
 
 const onDeleteContent = (state, action) => {
     let itemsCopy = { ...state.items };
+    const itemToDelete = {
+        name: itemsCopy[action.itemId].name,
+        checked: false
+    }
     delete (itemsCopy[action.itemId]);
 
     return updateObject(state, {
         deleteItem: false,
         itemIdToDelete: '',
-        items: itemsCopy
+        items: itemsCopy,
+        deletedItem: itemToDelete
+    })
+}
+
+const undoDelete = (state, action) => {
+    const newList = { ...state.items }
+    newList[action.id] = {
+        name: action.name,
+        count: 0
+    }
+
+    return updateObject(state, {
+        items: newList,
+        deletedItem: null,
+        loading: false
     })
 }
 
@@ -149,6 +170,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.ON_DELETE_ITEM: return onDeleteItem(state, action);
         case actionTypes.ON_DELETE_ITEM_CANCEL: return onDeleteItemCancel(state, action);
         case actionTypes.DELETE_ITEM_CONTENT: return onDeleteContent(state, action);
+        case actionTypes.UNDO_DELETE: return undoDelete(state, action);
 
         default: return state;
     };

@@ -35,10 +35,11 @@ export const deleteItem = (itemId) => {
 };
 
 
-export const getItems = (items) => {
+export const getItems = (items, deleted) => {
     return {
         type: actionTypes.GET_ALL_ITEMS,
-        items: items
+        items: items,
+        deleted
     }
 }
 
@@ -62,8 +63,9 @@ export const getAllItems = () => {
         try {
             axios.get(process.env.REACT_APP_API + '/api/item/getItems')
                 .then(resp => {
-                    items = resp.data;
-                    dispatch(getItems(items));
+                    items = resp.data.items;
+                    const deleted = resp.data.deleted ? { ...resp.data.deleted } : null;
+                    dispatch(getItems(items, deleted));
                 })
                 .catch(_ => dispatch(endLoading()));
         } catch (_) {
@@ -118,7 +120,7 @@ export const onDeleteItemCancel = () => {
     }
 }
 
-const onDeleteContent = (itemId) => {
+export const onDeleteContent = (itemId) => {
     return {
         type: actionTypes.DELETE_ITEM_CONTENT,
         itemId
@@ -134,5 +136,26 @@ export const deleteItemContent = (itemId, name) => {
                 dispatch(endLoading());
             })
             .catch(_ => dispatch(endLoading()))
+    }
+}
+
+export const undoDelete = (name, id) => {
+    return {
+        type: actionTypes.UNDO_DELETE,
+        name,
+        id
+    }
+}
+
+export const undoButtonClicked = deletedName => {
+    return dispatch => {
+        dispatch(initLoading());
+        axios.get(process.env.REACT_APP_API + `/api/item/undoDeleteItem/${deletedName}`)
+            .then(resp => {
+                if (resp.status === 200) {
+                    // const newItemId = resp.data;
+                    // dispatch(undoDelete(deletedName, newItemId));
+                }
+            }).catch(_ => dispatch(endLoading()));
     }
 }

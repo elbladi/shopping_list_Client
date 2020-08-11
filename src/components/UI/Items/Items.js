@@ -26,7 +26,7 @@ const Items = props => {
         return comparison;
     }
 
-    let itemList;
+    let itemList = [];
     if (props.items) {
         itemList = Object.keys(props.items).map(item => {
             return {
@@ -47,17 +47,18 @@ const Items = props => {
 
     return (
         <div className={classes.items}>
-            {props.loading && <div className={classes.spinner} ><img src={loading} alt='Loading' /></div>}
-            {itemList.map(item => {
-                const deleteItem = item.id === itemIdToDelete;
-                return <Item
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    amount={item.count}
-                    selectedToDelete={deleteItem}
-                />
-            })}
+            {props.loading ? <div className={classes.spinner} ><img src={loading} alt='Loading' /></div>
+                : itemList.map(item => {
+                    const deleteItem = item.id === itemIdToDelete;
+                    return <Item
+                        key={item.id}
+                        id={item.id}
+                        name={item.name}
+                        amount={item.count}
+                        selectedToDelete={deleteItem}
+                    />
+                })
+            }
         </div>
     )
 };
