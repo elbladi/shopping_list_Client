@@ -8,42 +8,40 @@ import Items from '../UI/Items/Items';
 import openSocket from 'socket.io-client';
 import ButtonUp from '../UI/Button/Button';
 import CarHandler from '../UI/Car/CarHandler';
+import Backdrop from '../UI/Backdrop/Backdrop';
 import Upload from '../UI/UploadImage/Upload';
 
 const Bels = props => {
 
-    const { getItems, onAddItem, onDeleteItem, getCar } = props;
+    const { carId, onAddItem, onDeleteItem, getCar, deleteItem, deleteCancel } = props;
 
     useEffect(() => {
         const socket = openSocket(process.env.REACT_APP_API);
         socket.on('added', data => {
-            if (data.item !== null) {
-                onAddItem(data.item);
+            if (data.itemId !== null) {
+                onAddItem(data.itemId);
             }
         });
         socket.on('deleted', data => {
-            if (data.item !== null) {
-                onDeleteItem(data.item);
+            if (data.itemId !== null) {
+                onDeleteItem(data.itemId);
             }
         })
         return () => socket.disconnect();
     }, [onAddItem, onDeleteItem]);
 
     useEffect(useCallback(() => {
-        getItems();
-    }, [getItems]), [getItems]);
-
-    useEffect(useCallback(() => {
-        getCar()
-    }, [getCar]), [])
+        getCar(carId)
+    }, [getCar, carId]))
 
     return (
         <Fragment>
             <Background background={fondo} />
+            {deleteItem && <Backdrop show={deleteItem} clicked={() => deleteCancel()} />}
             {props.showAddItem ? <Upload /> : (
                 props.goShopping ? <ShopInStoreList /> :
                     <>
-                        {props.items && <Items />}
+                        <Items />
                         < ButtonUp show={() => props.openAddItem()} />
                         <CarHandler />
                     </>
@@ -57,17 +55,19 @@ const mapStateToProps = state => {
     return {
         items: state.items.items !== null,
         goShopping: state.car.goShopping,
-        showAddItem: state.car.showAddItem
+        showAddItem: state.car.showAddItem,
+        deleteItem: state.items.deleteItem,
+        carId: state.car.carId
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        getItems: () => { dispatch(actions.getAllItems()) },
-        onAddItem: (name) => { dispatch(actions.add(name)) },
-        onDeleteItem: (name) => { dispatch(actions.remove(name)) },
-        getCar: () => dispatch(actions.getCar()),
+        onAddItem: (itemId) => dispatch(actions.add(itemId)),
+        onDeleteItem: (itemId) => dispatch(actions.remove(itemId)),
+        getCar: (carId) => dispatch(actions.getCar(carId)),
         openAddItem: () => dispatch(actions.openAddItem()),
+        deleteCancel: () => dispatch(actions.onDeleteItemCancel())
     }
 }
 
