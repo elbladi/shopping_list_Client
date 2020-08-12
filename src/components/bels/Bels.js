@@ -20,6 +20,7 @@ const Bels = props => {
         deleteItem,
         deleteCancel,
         onDeleteContent,
+        setDeletedItemToNull,
         undoDelete } = props;
 
     useEffect(() => {
@@ -44,8 +45,14 @@ const Bels = props => {
                 undoDelete(data.name, data.newItemId);
             }
         })
+        socket.on('onDeletedForever', data => {
+            if (data.deleted) {
+                setDeletedItemToNull();
+            }
+        })
+
         return () => socket.disconnect();
-    }, [onAddItem, onDeleteItem, onDeleteContent, undoDelete]);
+    }, [onAddItem, onDeleteItem, onDeleteContent, undoDelete, setDeletedItemToNull]);
 
     useEffect(useCallback(() => {
         getCar(carId)
@@ -93,6 +100,7 @@ const mapDispatchToProps = dispatch => {
         undoButtonClicked: (deletedItem) => dispatch(actions.undoButtonClicked(deletedItem)),
         onDeleteContent: (itemId) => dispatch(actions.onDeleteContent(itemId)),
         undoDelete: (name, id) => dispatch(actions.undoDelete(name, id)),
+        setDeletedItemToNull: () => dispatch(actions.setDeletedItemToNull()),
     }
 }
 

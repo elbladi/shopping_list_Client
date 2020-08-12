@@ -159,3 +159,9 @@ export const undoButtonClicked = deletedName => {
             }).catch(_ => dispatch(endLoading()));
     }
 }
+
+export const setDeletedItemToNull = () => {
+    return {
+        type: actionTypes.SET_DELETED_ITEM_TO_NULL
+    }
+}

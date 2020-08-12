@@ -20,7 +20,8 @@ export {
     deleteItemContent,
     undoButtonClicked,
     onDeleteContent,
-    undoDelete
+    undoDelete,
+    setDeletedItemToNull
 } from './items';
 
 export {

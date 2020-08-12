@@ -154,6 +154,11 @@ const undoDelete = (state, action) => {
     })
 }
 
+const setDeletedItemToNull = (state, action) => {
+    return updateObject(state, {
+        deletedItem: null
+    })
+}
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -171,6 +176,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.ON_DELETE_ITEM_CANCEL: return onDeleteItemCancel(state, action);
         case actionTypes.DELETE_ITEM_CONTENT: return onDeleteContent(state, action);
         case actionTypes.UNDO_DELETE: return undoDelete(state, action);
+        case actionTypes.SET_DELETED_ITEM_TO_NULL: return setDeletedItemToNull(state, action);
 
         default: return state;
     };
