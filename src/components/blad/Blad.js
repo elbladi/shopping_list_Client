@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useCallback } from 'react';
 import fondo from './assets/fondo.png';
 import Background from '../UI/Background/Background';
+import Backdrop from '../UI/Backdrop/Backdrop';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import Items from '../UI/Items/Items';
@@ -12,40 +13,64 @@ import Upload from '../UI/UploadImage/Upload';
 
 const Blad = props => {
 
-    const { getItems, onAddItem, onDeleteItem, getCar } = props;
+    const { carId,
+        onAddItem,
+        onDeleteItem,
+        getCar,
+        deleteItem,
+        deleteCancel,
+        onDeleteContent,
+        setDeletedItemToNull,
+        undoDelete } = props;
 
     useEffect(() => {
         const socket = openSocket(process.env.REACT_APP_API);
         socket.on('added', data => {
-            if (data.item !== null) {
-                onAddItem(data.item);
+            if (data.itemId !== null) {
+                onAddItem(data.itemId);
             }
         });
         socket.on('deleted', data => {
-            if (data.item !== null) {
-                onDeleteItem(data.item);
+            if (data.itemId !== null) {
+                onDeleteItem(data.itemId);
             }
         })
-        return () => socket.disconnect();
-    }, [onAddItem, onDeleteItem])
+        socket.on('deleteContent', data => {
+            if (data.itemId !== null) {
+                onDeleteContent(data.itemId);
+            }
+        })
+        socket.on('undoDeleteItem', data => {
+            if (data.newItemId !== null) {
+                undoDelete(data.name, data.newItemId);
+            }
+        })
+        socket.on('onDeletedForever', data => {
+            if (data.deleted) {
+                setDeletedItemToNull();
+            }
+        })
 
-    useEffect(() => {
-        getItems();
-    }, [getItems]);
+        return () => socket.disconnect();
+    }, [onAddItem, onDeleteItem, onDeleteContent, undoDelete, setDeletedItemToNull])
 
     useEffect(useCallback(() => {
-        getCar()
-    }, [getCar]), [])
-
+        getCar(carId)
+    }, [getCar, carId]))
 
     return (
         <Fragment>
             {<Background background={fondo} />}
+            {deleteItem && <Backdrop show={deleteItem} clicked={() => deleteCancel()} />}
             {props.showAddItem ? <Upload /> : (
                 props.goShopping ? <ShopInStoreList /> :
                     <>
-                        {props.items && <Items />}
-                        < ButtonUp show={() => props.openAddItem()} />
+                        <Items />
+                        < ButtonUp
+                            show={() => props.openAddItem()}
+                            undo={props.deletedItem ? true : false}
+                            clicked={() => props.undoButtonClicked(props.deletedItem.name)}
+                        />
                         <CarHandler />
                     </>
             )
@@ -58,17 +83,24 @@ const mapStateToProps = state => {
     return {
         items: state.items.items !== null,
         goShopping: state.car.goShopping,
-        showAddItem: state.car.showAddItem
+        showAddItem: state.car.showAddItem,
+        deleteItem: state.items.deleteItem,
+        carId: state.car.carId,
+        deletedItem: state.items.deletedItem,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        getItems: () => dispatch(actions.getAllItems()),
-        onAddItem: (name) => dispatch(actions.add(name)),
-        onDeleteItem: (name) => dispatch(actions.remove(name)),
-        getCar: () => dispatch(actions.getCar()),
+        onAddItem: (itemId) => dispatch(actions.add(itemId)),
+        onDeleteItem: (itemId) => dispatch(actions.remove(itemId)),
+        getCar: (carId) => dispatch(actions.getCar(carId)),
         openAddItem: () => dispatch(actions.openAddItem()),
+        deleteCancel: () => dispatch(actions.onDeleteItemCancel()),
+        undoButtonClicked: (deletedItem) => dispatch(actions.undoButtonClicked(deletedItem)),
+        onDeleteContent: (itemId) => dispatch(actions.onDeleteContent(itemId)),
+        undoDelete: (name, id) => dispatch(actions.undoDelete(name, id)),
+        setDeletedItemToNull: () => dispatch(actions.setDeletedItemToNull()),
     };
 };
 

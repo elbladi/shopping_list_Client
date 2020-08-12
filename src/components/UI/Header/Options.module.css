@@ -7,7 +7,7 @@
     margin: 0;
     text-align: center;
     width: 100%;
-    z-index: 2;
+    z-index: 102;
     position: fixed;
     transition: transform 400ms ease-in-out;
 }

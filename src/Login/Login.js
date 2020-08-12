@@ -12,28 +12,19 @@ const Login = props => {
 
     const handleLogin = (event) => {
         event.preventDefault();
-        if (input.length < 3)
-            return;
+        if (input.length < 3) return;
         props.onLogin(input);
-    }
-    const handleChange = (event) => {
-        setInput(event.target.value);
-    }
-
-    let redirect = null;
-    if (props.token) {
-        redirect = <Redirect to={props.userId} />
     }
 
     return (
         <Fragment>
-            {redirect}
+            {props.token && <Redirect to={props.userId} />}
             <div className={classes.login_background}>
                 {props.loading ? <img src={loadGif} alt="Loading" /> :
                     (<Fragment>
-                        <p className={classes.not_valid}>Not Valid size</p>
+                        {/* <p className={classes.not_valid}>Not Valid size</p> */}
                         <form onSubmit={(event) => handleLogin(event)}>
-                            <input className={classes.input_id} value={input} onChange={(event) => handleChange(event)} type='number' id='identify'></input>
+                            <input className={classes.input_id} onChange={(event) => setInput(event.target.value)} type='number' id='identify'></input>
                         </form>
                     </Fragment>)}
             </div>
@@ -45,10 +36,8 @@ const Login = props => {
 const mapStateToProps = state => {
     return {
         loading: state.login.loading,
-        error: state.login.error,
         userId: state.login.userId,
         token: state.login.token !== null,
-        message: state.login.message
     };
 };
 

@@ -9,10 +9,11 @@ export const showCarOptions = (name) => {
     }
 }
 
-export const add = name => {
+export const add = (name, docId) => {
     return {
         type: actionTypes.ADD_TO_CAR,
-        name: name
+        name: name,
+        docId
     }
 }
 
@@ -28,7 +29,7 @@ export const addToCar = (name) => {
         axios.post(process.env.REACT_APP_API + `/api/item/addToCar/${name}`)
             .then(resp => {
                 if (resp.data.message === `${name} ADDED TO CAR`) {
-                    dispatch(add(name));
+                    dispatch(add(name, resp.data.docId));
                     dispatch(closeCarOptions());
                 }
             })
@@ -36,9 +37,9 @@ export const addToCar = (name) => {
     }
 }
 
-export const removeToCar = (name) => {
+export const removeToCar = (name, carId) => {
     return dispatch => {
-        axios.post(process.env.REACT_APP_API + `/api/item/removeToCar/${name}`)
+        axios.post(process.env.REACT_APP_API + `/api/item/removeToCar/${name}`, { carId })
             .then(resp => {
                 if (resp.data.message === `${name} REMOVED TO CAR`) {
                     dispatch(remove(name));
@@ -55,19 +56,20 @@ export const closeCarOptions = () => {
     }
 }
 
-export const setCar = (car) => {
+export const setCar = (car, carId) => {
     return {
         type: actionTypes.GET_CAR,
-        car: car
+        car,
+        carId
     }
 }
 
-export const getCar = () => {
+export const getCar = carId => {
     return dispatch => {
 
-        axios.get(process.env.REACT_APP_API + '/api/item/getCar')
+        axios.get(process.env.REACT_APP_API + `/api/item/getCar/${carId}`)
             .then(resp => {
-                if (resp.data.car) dispatch(setCar(resp.data.car));
+                if (resp.data) dispatch(setCar(resp.data.car, resp.data.carId));
                 else dispatch(setCar([]));
             })
             .catch(err => { })
@@ -109,11 +111,11 @@ const changeOrder = (newArray) => {
     }
 }
 
-export const setOrder = (list, previousIndex, nextIndex) => {
+export const setOrder = (list, previousIndex, nextIndex, carId) => {
     return dispatch => {
         const newArray = reorder(list, previousIndex, nextIndex)
 
-        axios.post(process.env.REACT_APP_API + '/api/item/setOrder', newArray)
+        axios.post(process.env.REACT_APP_API + '/api/item/setOrder', { carId, newArray })
             .then(_ => { })
             .catch(err => console.log(err));
 
@@ -142,18 +144,19 @@ export const checkItem = (itemName) => {
     }
 }
 
-const clearList = (newList) => {
+const clearList = (newList, carId) => {
     return {
         type: actionTypes.CLEAR_ADDED_LIST,
-        list: newList
+        list: newList,
+        carId
     }
 }
 
-export const clearAddedList = (addedList) => {
+export const clearAddedList = (addedList, carId) => {
     return dispatch => {
         const newList = addedList.filter(item => item.checked !== true)
-        axios.patch(process.env.REACT_APP_API + '/api/item/updateOrderedList', newList)
-            .then(_ => dispatch(clearList(newList)))
+        axios.patch(process.env.REACT_APP_API + '/api/item/updateOrderedList', { newList, carId })
+            .then(resp => dispatch(clearList(newList, resp.data.carId)))
             .catch(err => console.log(err));
     }
 }

@@ -14,7 +14,14 @@ export {
     searchByName,
     searchByQuantity,
     showAll,
-    setSocket
+    setSocket,
+    onDeleteItem,
+    onDeleteItemCancel,
+    deleteItemContent,
+    undoButtonClicked,
+    onDeleteContent,
+    undoDelete,
+    setDeletedItemToNull
 } from './items';
 
 export {

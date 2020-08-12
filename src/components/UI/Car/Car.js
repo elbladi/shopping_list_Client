@@ -7,13 +7,13 @@ import * as actions from '../../../store/actions';
 import { connect } from 'react-redux';
 
 const Car = props => {
-    const { getCar } = props;
+    const { getCar, carId } = props;
     useEffect(() => {
-        getCar();
-    }, [getCar])
+        getCar(carId);
+    }, [getCar, carId])
 
     const onReorder = (event, previousIndex, nextIndex, fromId, toId) => {
-        props.setOrder(props.added, previousIndex, nextIndex)
+        props.setOrder(props.added, previousIndex, nextIndex, carId)
     }
 
     let list = '';
@@ -31,7 +31,7 @@ const Car = props => {
                 return (
                     <div key={item.name} className={classes.item} >
                         <div className={classes.itemName} >{itemName}</div>
-                        <Delete onClick={() => props.removeToCar(item.name)} />
+                        <Delete onClick={() => props.removeToCar(item.name, carId)} />
                     </div>
                 )
             })}
@@ -55,16 +55,17 @@ const Car = props => {
 
 const mapStateToProps = state => {
     return {
-        added: state.car.listToShop
+        added: state.car.listToShop,
+        carId: state.car.carId
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        removeToCar: (name) => dispatch(actions.removeToCar(name)),
+        removeToCar: (name, carId) => dispatch(actions.removeToCar(name, carId)),
         sendMail: (car) => dispatch(actions.sendMail(car)),
-        setOrder: (list, previousIndex, nextIndex) => dispatch(actions.setOrder(list, previousIndex, nextIndex)),
-        getCar: () => dispatch(actions.getCar()),
+        setOrder: (list, previousIndex, nextIndex, carId) => dispatch(actions.setOrder(list, previousIndex, nextIndex, carId)),
+        getCar: (carId) => dispatch(actions.getCar(carId)),
         goShopping: () => dispatch(actions.goShopping())
     }
 }
