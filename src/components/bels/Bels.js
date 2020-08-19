@@ -46,8 +46,8 @@ const Bels = props => {
             }
         })
         socket.on('onDeletedForever', data => {
-            if (data.deleted) {
-                setDeletedItemToNull();
+            if (data.name) {
+                setDeletedItemToNull(data.name);
             }
         })
 
@@ -100,7 +100,7 @@ const mapDispatchToProps = dispatch => {
         undoButtonClicked: (deletedItem) => dispatch(actions.undoButtonClicked(deletedItem)),
         onDeleteContent: (itemId) => dispatch(actions.onDeleteContent(itemId)),
         undoDelete: (name, id) => dispatch(actions.undoDelete(name, id)),
-        setDeletedItemToNull: () => dispatch(actions.setDeletedItemToNull()),
+        setDeletedItemToNull: (itemName) => dispatch(actions.setDeletedItemToNull(itemName)),
     }
 }
 

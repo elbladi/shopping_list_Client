@@ -7,7 +7,7 @@ import loading from '../../../Login/loading.gif';
 
 const Items = props => {
 
-    const { getItems, itemIdToDelete } = props;
+    const { getItems, itemIdToDelete, user } = props;
 
     useEffect(() => {
         getItems();
@@ -33,6 +33,7 @@ const Items = props => {
                 id: item,
                 name: props.items[item].name,
                 count: props.items[item].count,
+                image: user === 'bladi' ? props.items[item].img_bladi : props.items[item].img_beli,
             }
         })
         if (props.byName)
@@ -55,6 +56,7 @@ const Items = props => {
                         id={item.id}
                         name={item.name}
                         amount={item.count}
+                        image={item.image}
                         selectedToDelete={deleteItem}
                     />
                 })
@@ -71,7 +73,8 @@ const mapStateToProps = state => {
         name: state.items.name,
         quantity: state.items.quantity,
         loading: state.items.loading,
-        itemIdToDelete: state.items.itemIdToDelete
+        itemIdToDelete: state.items.itemIdToDelete,
+        user: state.login.userId,
     };
 };
 

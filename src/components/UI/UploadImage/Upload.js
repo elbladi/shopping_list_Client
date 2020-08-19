@@ -9,7 +9,6 @@ const Upload = props => {
 
     const [pickedFile, setPickedFile] = useState();
     const [name, setName] = useState('');
-    const { user } = props;
 
     const handleImageView = async (pickedFile, fileIsValid) => {
         if (!fileIsValid) return;
@@ -17,14 +16,16 @@ const Upload = props => {
         setPickedFile(pickedFile);
     }
 
-    const addAndKeepAdding = () => {
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('user', user);
-        formData.append('image', pickedFile);
-        props.uploadNewItem(formData, true);
-        setPickedFile(undefined);
-        setName('');
+    const handleUpload = (close) => {
+        if (name === '' || name === null || pickedFile === null) return;
+
+        props.uploadNewItem(name, pickedFile, close)
+
+        if (!close) {
+            setName('');
+            setPickedFile(undefined);
+        }
+
     }
 
     const disabled = pickedFile && name.length > 0;
@@ -50,18 +51,12 @@ const Upload = props => {
                         </div>
                         <div className={classes.buttons} >
                             <button
-                                onClick={() => {
-                                    const formData = new FormData();
-                                    formData.append('name', name);
-                                    formData.append('user', user);
-                                    formData.append('image', pickedFile);
-                                    props.uploadNewItem(formData)
-                                }}
+                                onClick={() => handleUpload(true)}
                                 className={`${classes.button} ${!disabled && classes.disabled}`}
                                 disabled={!disabled}
                             >Subir</button>
                             <button
-                                onClick={() => addAndKeepAdding()}
+                                onClick={() => handleUpload(false)}
                                 className={`${classes.button} ${!disabled && classes.disabled}`}
                                 disabled={!disabled}
                             >Subir y Agregar</button>
@@ -69,7 +64,6 @@ const Upload = props => {
                                 onClick={() => props.closeAddItem()}
                                 className={`${classes.button}`}
                             >Cancelar</button>
-
                         </div>
                     </div>
                 }
@@ -80,7 +74,6 @@ const Upload = props => {
 
 const mapStateToProps = state => {
     return {
-        user: state.login.userId,
         loading: state.car.loading
     }
 }

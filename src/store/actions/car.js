@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios';
 import { reorder } from 'react-reorder';
+import storage from '../../helper/firebase';
 
 export const showCarOptions = (name) => {
     return {
@@ -207,16 +208,44 @@ export const openAddItem = () => {
     }
 }
 
-export const uploadNewItem = (formData, keep = false) => {
+const uploadImg = (user, name, pickedFile) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const uploadTask = storage.ref().child(`${user}/${name}.png`).put(pickedFile);
+            uploadTask.on('state_changed', () => { }, err => { throw err },
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL()
+                        .then(url => {
+                            resolve(url);
+                        }).catch(err => { throw err });
+                });
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+export const uploadNewItem = (name, pickedFile, close) => {
     return dispatch => {
         dispatch(initLoading());
-        axios.post(process.env.REACT_APP_API + '/api/item/uploadItem', formData)
-            .then(_ => {
-                if (!keep) dispatch(closeAddItem())
-                else dispatch(endLoading());
-            }).catch(err => {
-                dispatch(endLoading());
-            })
 
+        try {
+            uploadImg('bladi', name, pickedFile).then(img_bladi => {
+                uploadImg('beli', name, pickedFile).then(img_beli => {
+                    const item = {
+                        name,
+                        img_bladi,
+                        img_beli
+                    }
+                    axios.post(process.env.REACT_APP_API + '/api/item/uploadItem', item)
+                        .then(_ => {
+                            if (close) dispatch(closeAddItem())
+                            else dispatch(endLoading());
+                        }).catch(err => { throw err })
+                }).catch(err => { throw err })
+            }).catch(err => { throw err });
+        } catch (error) {
+            dispatch(endLoading());
+        }
     }
 }

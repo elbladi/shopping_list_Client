@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios';
+import storage from '../../helper/firebase';
 
 export const add = (itemId) => {
     return {
@@ -160,8 +161,34 @@ export const undoButtonClicked = deletedName => {
     }
 }
 
-export const setDeletedItemToNull = () => {
+const deleteForever = () => {
     return {
         type: actionTypes.SET_DELETED_ITEM_TO_NULL
+    }
+}
+
+export const setDeletedItemToNull = (itemName) => {
+    return dispatch => {
+        console.log('Eliminando imagenes!')
+        try {
+            const ref = storage.ref();
+            ref.child(`bladi/${itemName}.png`).delete()
+                .then(_ => {
+                    ref.child(`beli/${itemName}.png`).delete()
+                        .then(_ => {
+                            console.log('Si se borraron las img')
+                            dispatch(deleteForever());
+                        }).catch(err => {
+                            console.log('error en Beli/name')
+                            throw err
+                        })
+                }).catch(err => {
+                    console.log('error en Bladi/name')
+                    throw err
+                });
+        } catch (error) {
+            console.log('Fuck!')
+            console.log(error);
+        }
     }
 }
