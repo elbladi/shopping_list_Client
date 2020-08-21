@@ -5,7 +5,7 @@ import * as actions from '../../../store/actions';
 import LoadingImg from '../../../Login/loading.gif';
 import { connect } from 'react-redux';
 import Backdrop from '../Backdrop/Backdrop';
-import { Transition } from 'react-transition-group'
+import { CSSTransition } from 'react-transition-group'
 
 const Upload = props => {
 
@@ -41,7 +41,7 @@ const Upload = props => {
     return (
         <>
             <Backdrop show={props.show && showBackdrop} clicked={() => props.closeAddItem()} />
-            <Transition
+            <CSSTransition
                 in={props.show}
                 timeout={animationTiming}
                 mountOnEnter
@@ -49,56 +49,51 @@ const Upload = props => {
                 appear
                 onEntered={() => setShowBackdrop(true)}
                 onExited={() => setShowBackdrop(false)}
-            >
-                {state => {
-                    const cssClasses = [classes.addNewItem,
-                    state === 'entering' ?
-                        classes.openModal :
-                        state === 'exiting' ? classes.exitModal : null
-                    ]
-                    return (
-                        <div className={cssClasses.join(' ')} >
-                            <div className={classes.card} >
-                                {props.loading ? (
-                                    <div className={classes.loading} > <img src={LoadingImg} alt='loading' /> </div>)
-                                    :
-                                    <div className={classes.content} >
-                                        <ImageUpload
-                                            center
-                                            message='Seleccionar imagen'
-                                            onInput={(_, pickedFile, fileIsValid) => handleImageView(pickedFile, fileIsValid)}
-                                        />
-                                        <div className={classes.nameInput} >
-                                            <input
-                                                placeholder='Nombre'
-                                                className={classes.input}
-                                                type='text'
-                                                onChange={(event) => setName(event.target.value)} />
-                                        </div>
-                                        <div className={classes.buttons} >
-                                            <button
-                                                onClick={() => handleUpload(true)}
-                                                className={`${classes.button} ${!disabled && classes.disabled}`}
-                                                disabled={!disabled}
-                                            >Subir</button>
-                                            <button
-                                                onClick={() => handleUpload(false)}
-                                                className={`${classes.button} ${!disabled && classes.disabled}`}
-                                                disabled={!disabled}
-                                            >Subir y Agregar</button>
-                                            <button
-                                                onClick={() => props.closeAddItem()}
-                                                className={`${classes.button}`}
-                                            >Cancelar</button>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    );
+                classNames={{
+                    enterActive: classes.openModal,
+                    exitActive: classes.exitModal
                 }}
 
-            </Transition>
+            >
+                <div className={classes.addNewItem} >
+                    <div className={classes.card} >
+                        {props.loading ? (
+                            <div className={classes.loading} > <img src={LoadingImg} alt='loading' /> </div>)
+                            :
+                            <div className={classes.content} >
+                                <ImageUpload
+                                    center
+                                    message='Seleccionar imagen'
+                                    onInput={(_, pickedFile, fileIsValid) => handleImageView(pickedFile, fileIsValid)}
+                                />
+                                <div className={classes.nameInput} >
+                                    <input
+                                        placeholder='Nombre'
+                                        className={classes.input}
+                                        type='text'
+                                        onChange={(event) => setName(event.target.value)} />
+                                </div>
+                                <div className={classes.buttons} >
+                                    <button
+                                        onClick={() => handleUpload(true)}
+                                        className={`${classes.button} ${!disabled && classes.disabled}`}
+                                        disabled={!disabled}
+                                    >Subir</button>
+                                    <button
+                                        onClick={() => handleUpload(false)}
+                                        className={`${classes.button} ${!disabled && classes.disabled}`}
+                                        disabled={!disabled}
+                                    >Subir y Agregar</button>
+                                    <button
+                                        onClick={() => props.closeAddItem()}
+                                        className={`${classes.button}`}
+                                    >Cancelar</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </CSSTransition>
         </>
     )
 };
