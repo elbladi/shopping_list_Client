@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Login from './Login/Login';
-import Blad from './components/blad/Blad';
-import Bels from './components/bels/Bels';
+// import Blad from './components/blad/Blad';
+// import Bels from './components/bels/Bels';
+import User from './components/user/User';
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 import './App.css';
@@ -14,27 +15,19 @@ const App = props => {
     onAutoLogin();
   }, [onAutoLogin]);
 
-  let routes;
+  let routes = (
+    <Switch>
+      <Route path='/' exact component={Login} />
+      <Redirect to='/' />
+    </Switch>
+  )
 
   if (props.token) {
-    if (props.userId === 'beli') {
-      routes = (<Switch>
-        <Route path='/beli' component={Bels} />;
-        <Redirect to='/beli' />
-      </Switch>)
-    } else {
-      routes = (<Switch>
-        <Route path='/blad' component={Blad} />;
-        <Redirect to='/blad' />
-      </Switch>)
-    }
-  } else {
     routes = (
       <Switch>
-        <Route path='/' exact component={Login} />
-        <Redirect to='/' />
-      </Switch>
-    )
+        <Route path='/list' component={User} />;
+        <Redirect to='/list' />
+      </Switch>)
   }
 
   return (
@@ -46,7 +39,6 @@ const App = props => {
 
 const mapStateToProps = state => {
   return {
-    userId: state.login.userId,
     token: state.login.token !== null,
   }
 }

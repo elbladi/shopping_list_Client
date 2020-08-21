@@ -1,8 +1,9 @@
 .addNewItem {
   height: calc(100vh - 200px);
+  transition: all 0.3s ease-in-out;
 }
-
 .card {
+  z-index: 120;
   position: relative;
   margin: 6% auto;
   flex-direction: column;
@@ -69,4 +70,42 @@
 .loading img {
   height: 50%;
   margin: 50% 0;
+}
+
+.openModal {
+  animation: openUploadModal 0.3s ease-out forwards;
+}
+
+.exitModal {
+  animation: closeUploadModal 0.3s ease-out forwards;
+}
+
+@keyframes openUploadModal {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(15%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes closeUploadModal {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(20%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
 }
