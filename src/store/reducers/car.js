@@ -16,12 +16,12 @@ const initialState = {
 
 const showCarOptions = (state, action) => {
     let exist = false;
-    const itemExist = state.listToShop.filter(item => item.name === action.selected)
+    const itemExist = state.listToShop.filter(item => item.name === action.item.name)
     if (itemExist.length > 0) exist = true;
 
     return updateObject(state, {
         showCarOptions: true,
-        selected: action.selected,
+        selected: action.item,
         existInList: exist
     })
 }

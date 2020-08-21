@@ -33,7 +33,8 @@ const Items = props => {
                 id: item,
                 name: props.items[item].name,
                 count: props.items[item].count,
-                image: user === 'bladi' ? props.items[item].img_bladi : props.items[item].img_beli,
+                img_bladi: props.items[item].img_bladi,
+                img_beli: props.items[item].img_beli,
             }
         })
         if (props.byName)
@@ -53,10 +54,11 @@ const Items = props => {
                     const deleteItem = item.id === itemIdToDelete;
                     return <Item
                         key={item.id}
+                        item={item}
                         id={item.id}
                         name={item.name}
                         amount={item.count}
-                        image={item.image}
+                        image={user === 'bladi' ? item.img_bladi : item.img_beli}
                         selectedToDelete={deleteItem}
                     />
                 })

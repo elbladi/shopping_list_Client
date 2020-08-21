@@ -60,6 +60,7 @@ const endLoading = () => {
 export const getAllItems = () => {
     return dispatch => {
         dispatch(initLoading());
+        // dispatch(getItems(items, null))
         let items
         try {
             axios.get(process.env.REACT_APP_API + '/api/item/getItems')
@@ -121,74 +122,73 @@ export const onDeleteItemCancel = () => {
     }
 }
 
-export const onDeleteContent = (itemId) => {
+export const onDeleteContent = (itemId, images, canUndo) => {
     return {
         type: actionTypes.DELETE_ITEM_CONTENT,
-        itemId
+        itemId,
+        images,
+        canUndo
     }
 }
 
-export const deleteItemContent = (itemId, name) => {
+export const deleteItemContent = (itemId, userId, itemName) => {
     return dispatch => {
         dispatch(initLoading());
-        axios.patch(process.env.REACT_APP_API + '/api/item/deleteContent', { itemId, name })
+        axios.patch(process.env.REACT_APP_API + '/api/item/deleteContent', { itemId, userId })
             .then(resp => {
-                if (resp.status === 200) dispatch(onDeleteContent(itemId))
+                if (resp.status === 200) {
+                    dispatch(onDeleteContent(itemId, resp.data, true))
+                    setTimeout(() => {
+                        dispatch(removeUndoButton(itemName));
+                    }, 1000 * 60)
+                }
                 dispatch(endLoading());
             })
             .catch(_ => dispatch(endLoading()))
     }
 }
 
-export const undoDelete = (name, id) => {
+export const undoDelete = (item) => {
+    if (!item.id) return;
+    const itemId = item.id;
+    delete (item['id']);
     return {
         type: actionTypes.UNDO_DELETE,
-        name,
-        id
+        item,
+        itemId
     }
 }
 
-export const undoButtonClicked = deletedName => {
+export const undoButtonClicked = (deletedName, images, userId) => {
     return dispatch => {
         dispatch(initLoading());
-        axios.get(process.env.REACT_APP_API + `/api/item/undoDeleteItem/${deletedName}`)
+        axios.post(process.env.REACT_APP_API + `/api/item/undoDeleteItem`, { deletedName, images, userId })
             .then(resp => {
-                if (resp.status === 200) {
-                    // const newItemId = resp.data;
-                    // dispatch(undoDelete(deletedName, newItemId));
-                }
+                if (resp.status === 200) dispatch(undoDelete(resp.data));
+
             }).catch(_ => dispatch(endLoading()));
     }
 }
 
-const deleteForever = () => {
+const removeUndoBtn = () => {
     return {
-        type: actionTypes.SET_DELETED_ITEM_TO_NULL
+        type: actionTypes.REMOVE_UNDO_BUTTON
     }
 }
 
-export const setDeletedItemToNull = (itemName) => {
+const removeUndoButton = itemName => {
     return dispatch => {
-        console.log('Eliminando imagenes!')
+        dispatch(removeUndoBtn());
         try {
             const ref = storage.ref();
             ref.child(`bladi/${itemName}.png`).delete()
                 .then(_ => {
                     ref.child(`beli/${itemName}.png`).delete()
-                        .then(_ => {
-                            console.log('Si se borraron las img')
-                            dispatch(deleteForever());
-                        }).catch(err => {
-                            console.log('error en Beli/name')
-                            throw err
-                        })
+                        .then(_ => { }).catch(err => { throw err })
                 }).catch(err => {
-                    console.log('error en Bladi/name')
                     throw err
                 });
-        } catch (error) {
-            console.log('Fuck!')
-            console.log(error);
-        }
+        } catch (error) { }
     }
 }
+

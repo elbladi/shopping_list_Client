@@ -25,14 +25,14 @@ const Item = props => {
                     <Add />
                 </button>}
                 <div className={classes.item_ima_count}>
-                    { 
+                    {
                         props.selectedToDelete ? (
                             <div className={`${classes.item_ima} ${classes.delIcon}`} >
                                 {props.loading ? (
                                     <div className={classes.loading} >
                                         <img src={Spinner} alt='Loading...' />
                                     </div>
-                                ) : <DeleteSvg onClick={() => props.deleteItemContent(props.id, props.name)} />}
+                                ) : <DeleteSvg onClick={() => props.deleteItemContent(props.id, props.userId, props.name)} />}
                             </div>
                         ) :
                             <LongPress
@@ -40,7 +40,7 @@ const Item = props => {
                                 key={props.id}
                                 onLongPress={() => props.setToDeleteItem(props.id)}
                             >
-                                <div className={classes.item_ima} onClick={() => { props.showCarOptions(props.name) }} >
+                                <div className={classes.item_ima} onClick={() => { props.showCarOptions(props.item) }} >
                                     <LazyLoadImage
                                         alt={props.name}
                                         src={props.image}
@@ -72,12 +72,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        showCarOptions: (name) => { dispatch(actions.showCarOptions(name)) },
+        showCarOptions: (item) => { dispatch(actions.showCarOptions(item)) },
         closeCarOptions: () => { dispatch(actions.closeCarOptions()) },
         onDeleteItem: (itemId) => { dispatch(actions.deleteItem(itemId)) },
         onAddItem: (id) => dispatch(actions.addItem(id)),
         setToDeleteItem: (itemId) => dispatch(actions.onDeleteItem(itemId)),
-        deleteItemContent: (itemId, name) => dispatch(actions.deleteItemContent(itemId, name))
+        deleteItemContent: (itemId, userId, itemName) => dispatch(actions.deleteItemContent(itemId, userId, itemName))
     };
 };
 

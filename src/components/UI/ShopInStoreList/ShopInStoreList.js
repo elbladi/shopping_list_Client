@@ -1,11 +1,10 @@
 import React from 'react';
-import { ReactComponent as Checked } from '../assets/checked.svg';
-import { ReactComponent as Unchecked } from '../assets/unchecked.svg';
 import classes from './ShopInStoreList.module.css';
 import * as actions from '../../../store/actions';
 import Reorder from 'react-reorder';
 import LoadingImg from '../../../Login/loading.gif';
 import { connect } from 'react-redux';
+import ItemInList from './ItemInList';
 
 const ShopInStoreList = props => {
 
@@ -24,12 +23,12 @@ const ShopInStoreList = props => {
             {props.listToShop.map(item => {
                 let itemName = item.name.replace('_', ' ');
                 itemName = itemName.charAt(0).toUpperCase() + itemName.slice(1);
-                return (
-                    <div key={item.name} className={classes.itemRow} onClick={() => props.checkItem(item.name)} >
-                        {item.checked ? <Checked /> : <Unchecked />}
-                        <span className={item.checked ? classes.itemName : ''} >{itemName}</span>
-                    </div>
-                )
+                return <ItemInList
+                    clicked={() => props.checkItem(item.name)}
+                    checked={item.checked}
+                    itemName={itemName}
+                    image={props.user === 'bladi' ? item.img_bladi : item.img_beli}
+                    key={item.name} />
             })}
         </Reorder>
     }
@@ -64,6 +63,7 @@ const mapStateToProps = state => {
         loading: state.car.loading,
         listToShop: state.car.listToShop,
         carId: state.car.carId,
+        user: state.login.userId
     }
 }
 

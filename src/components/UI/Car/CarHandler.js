@@ -36,7 +36,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddToCar: (name) => dispatch(actions.addToCar(name)),
+        onAddToCar: (item) => dispatch(actions.addToCar(item)),
         onRemoveToCar: (name, carId) => dispatch(actions.removeToCar(name, carId)),
         onCloseCarOptions: () => dispatch(actions.closeCarOptions())
     }

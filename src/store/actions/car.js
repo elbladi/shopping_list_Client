@@ -3,10 +3,10 @@ import axios from '../../axios';
 import { reorder } from 'react-reorder';
 import storage from '../../helper/firebase';
 
-export const showCarOptions = (name) => {
+export const showCarOptions = (item) => {
     return {
         type: actionTypes.SHOW_CAR_OPTIONS,
-        selected: name
+        item,
     }
 }
 
@@ -25,12 +25,13 @@ export const remove = (name) => {
     }
 }
 
-export const addToCar = (name) => {
+export const addToCar = (item) => {
     return dispatch => {
-        axios.post(process.env.REACT_APP_API + `/api/item/addToCar/${name}`)
+        console.log(item);
+        axios.post(process.env.REACT_APP_API + `/api/item/addToCar`, item)
             .then(resp => {
-                if (resp.data.message === `${name} ADDED TO CAR`) {
-                    dispatch(add(name, resp.data.docId));
+                if (resp.data.message === `${item.name} ADDED TO CAR`) {
+                    dispatch(add(item.name, resp.data.docId));
                     dispatch(closeCarOptions());
                 }
             })

@@ -11,6 +11,7 @@ const initialState = {
     deleteItem: false,
     itemIdToDelete: '',
     deletedItem: null,
+    imagesToDelete: {},
 }
 
 const addItem = (state, action) => {
@@ -136,16 +137,14 @@ const onDeleteContent = (state, action) => {
         deleteItem: false,
         itemIdToDelete: '',
         items: itemsCopy,
-        deletedItem: itemToDelete
+        deletedItem: action.canUndo ? itemToDelete : null,
+        imagesToDelete: action.images
     })
 }
 
 const undoDelete = (state, action) => {
     const newList = { ...state.items }
-    newList[action.id] = {
-        name: action.name,
-        count: 0
-    }
+    newList[action.itemId] = { ...action.item }
 
     return updateObject(state, {
         items: newList,
@@ -154,7 +153,7 @@ const undoDelete = (state, action) => {
     })
 }
 
-const setDeletedItemToNull = (state, action) => {
+const removeUndoButton = (state, action) => {
     return updateObject(state, {
         deletedItem: null
     })
@@ -176,7 +175,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.ON_DELETE_ITEM_CANCEL: return onDeleteItemCancel(state, action);
         case actionTypes.DELETE_ITEM_CONTENT: return onDeleteContent(state, action);
         case actionTypes.UNDO_DELETE: return undoDelete(state, action);
-        case actionTypes.SET_DELETED_ITEM_TO_NULL: return setDeletedItemToNull(state, action);
+        case actionTypes.REMOVE_UNDO_BUTTON: return removeUndoButton(state, action);
 
         default: return state;
     };

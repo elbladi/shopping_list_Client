@@ -8,7 +8,7 @@ import * as actions from '../../store/actions';
 import Items from '../UI/Items/Items';
 import ShopInStoreList from '../UI/ShopInStoreList/ShopInStoreList';
 import openSocket from 'socket.io-client';
-import ButtonUp from '../UI/Button/Button';
+import BottomButtons from '../UI/Button/Button';
 import CarHandler from '../UI/Car/CarHandler';
 import Upload from '../UI/UploadImage/Upload';
 
@@ -21,41 +21,32 @@ const Blad = props => {
         deleteItem,
         deleteCancel,
         onDeleteContent,
-        setDeletedItemToNull,
         undoDelete,
         userId,
+        images,
     } = props;
 
     useEffect(() => {
         const socket = openSocket(process.env.REACT_APP_API);
         socket.on('added', data => {
-            if (data.itemId !== null) {
+            if (data.itemId !== null)
                 onAddItem(data.itemId);
-            }
         });
         socket.on('deleted', data => {
-            if (data.itemId !== null) {
+            if (data.itemId !== null)
                 onDeleteItem(data.itemId);
-            }
         })
         socket.on('deleteContent', data => {
-            if (data.itemId !== null) {
-                onDeleteContent(data.itemId);
-            }
+            if (data.userId === userId) return;
+            if (data.itemId !== null)
+                onDeleteContent(data.itemId, data.images);
         })
         socket.on('undoDeleteItem', data => {
-            if (data.newItemId !== null) {
-                undoDelete(data.name, data.newItemId);
-            }
+            if (data.userId === userId) return
+            if (data.newItem !== null) undoDelete(data.newItem);
         })
-        socket.on('onDeletedForever', data => {
-            if (data.name) {
-                setDeletedItemToNull(data.name);
-            }
-        })
-
         return () => socket.disconnect();
-    }, [onAddItem, onDeleteItem, onDeleteContent, undoDelete, setDeletedItemToNull])
+    }, [onAddItem, onDeleteItem, onDeleteContent, undoDelete, userId])
 
     useEffect(useCallback(() => {
         getCar(carId)
@@ -70,10 +61,10 @@ const Blad = props => {
                 props.goShopping ? <ShopInStoreList /> :
                     <>
                         <Items />
-                        < ButtonUp
+                        < BottomButtons
                             show={() => props.openAddItem()}
                             undo={props.deletedItem ? true : false}
-                            clicked={() => props.undoButtonClicked(props.deletedItem.name)}
+                            clicked={() => props.undoButtonClicked(props.deletedItem.name, images, userId)}
                         />
                         <CarHandler />
                     </>
@@ -92,6 +83,7 @@ const mapStateToProps = state => {
         carId: state.car.carId,
         deletedItem: state.items.deletedItem,
         userId: state.login.userId,
+        images: state.items.imagesToDelete
     }
 }
 
@@ -102,10 +94,9 @@ const mapDispatchToProps = dispatch => {
         getCar: (carId) => dispatch(actions.getCar(carId)),
         openAddItem: () => dispatch(actions.openAddItem()),
         deleteCancel: () => dispatch(actions.onDeleteItemCancel()),
-        undoButtonClicked: (deletedItem) => dispatch(actions.undoButtonClicked(deletedItem)),
-        onDeleteContent: (itemId) => dispatch(actions.onDeleteContent(itemId)),
-        undoDelete: (name, id) => dispatch(actions.undoDelete(name, id)),
-        setDeletedItemToNull: (itemName) => dispatch(actions.setDeletedItemToNull(itemName)),
+        undoButtonClicked: (deletedItem, images, userId) => dispatch(actions.undoButtonClicked(deletedItem, images, userId)),
+        onDeleteContent: (itemId, images) => dispatch(actions.onDeleteContent(itemId, images, false)),
+        undoDelete: (item) => dispatch(actions.undoDelete(item)),
     };
 };
 

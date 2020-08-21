@@ -1,0 +1,37 @@
+.itemRow {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 1rem;
+  align-items: center;
+  margin: 2% 0;
+}
+
+.ima {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.greyFormat img {
+  filter: grayscale(100%);
+}
+
+.ima img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.itemRow svg {
+  height: 25px;
+  width: 25px;
+}
+
+.itemRow span {
+  margin-left: 10px;
+}
+
+.itemName {
+  text-decoration: line-through;
+  color: #787878;
+}

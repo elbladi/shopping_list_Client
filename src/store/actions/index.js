@@ -21,7 +21,6 @@ export {
     undoButtonClicked,
     onDeleteContent,
     undoDelete,
-    setDeletedItemToNull
 } from './items';
 
 export {

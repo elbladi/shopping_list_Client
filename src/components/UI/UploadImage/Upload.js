@@ -28,10 +28,10 @@ const Upload = props => {
         if (name === '' || name === null || pickedFile === null) return;
 
         props.uploadNewItem(name, pickedFile, close)
+        setPickedFile(undefined);
 
         if (!close) {
             setName('');
-            setPickedFile(undefined);
         }
 
     }
