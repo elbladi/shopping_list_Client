@@ -20,7 +20,7 @@ const Car = props => {
     let list = '';
     if (props.added.length > 0) {
         list = <Reorder
-            reorderId="my-list"
+            reorderId="my-listx"
             onReorder={onReorder.bind(this)}
             touchHoldTime={200}
             holdTime={500}
