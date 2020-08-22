@@ -4,10 +4,11 @@ import classes from './Car.module.css';
 import { ReactComponent as Delete } from '../assets/delete.svg';
 import { ReactComponent as Empty } from '../assets/empty.svg';
 import * as actions from '../../../store/actions';
+import { CSSTransition } from 'react-transition-group';
 import { connect } from 'react-redux';
 
 const Car = props => {
-    const { getCar, carId } = props;
+    const { getCar, carId, show } = props;
     useEffect(() => {
         getCar(carId);
     }, [getCar, carId])
@@ -40,16 +41,32 @@ const Car = props => {
         list = <div className={classes.emptyCar} ><Empty /></div>
     }
 
+    const animationTiming = {
+        enter: 300,
+        exit: 300
+    }
+
     return (
-        <div className={classes.carModal} >
-            <div className={classes.header} >
-                <div className={classes.go} onClick={() => props.goShopping()} ><span>Go Shopping!</span></div>
-                <div>MY SHOPPING CAR</div>
+        <CSSTransition
+            timeout={animationTiming}
+            mountOnEnter
+            unmountOnExit
+            appear
+            classNames={{
+                enterActive: classes.openCarActive,
+                exitActive: classes.closeCarActive,
+            }}
+            in={show}>
+            <div className={classes.carModal} >
+                <div className={classes.header} >
+                    <div className={classes.go} onClick={() => props.goShopping()} ><span>Go Shopping!</span></div>
+                    <div>MY SHOPPING CAR</div>
+                </div>
+                <div className={classes.itemList} >
+                    {list}
+                </div>
             </div>
-            <div className={classes.itemList} >
-                {list}
-            </div>
-        </div>
+        </CSSTransition>
     )
 }
 

@@ -46,12 +46,10 @@ const Header = (props) => {
     return (
         <Fragment>
             {props.token && <Redirect to='/' />}
-            {props.showCar && (
-                <>
-                    <Backdrop show={props.showCar} clicked={() => props.setShowCar(false)} />
-                    <Car />
-                </>
-            )}
+
+            <Backdrop show={props.showCar} clicked={() => props.setShowCar(false)} />
+            <Car show={props.showCar} />
+
             <div className={classes.header}>
                 <div className={classes.close} onClick={(event) => logout(event)} > {logoutIcon} </div>
                 <span onClick={() => handleClickInHeader()} >My Shopping list</span>
