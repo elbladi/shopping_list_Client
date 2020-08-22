@@ -4,7 +4,6 @@ import * as actions from '../../../store/actions';
 import Reorder from 'react-reorder';
 import LoadingImg from '../../../Login/loading.gif';
 import { connect } from 'react-redux';
-import ItemInList from './ItemInList';
 
 const ShopInStoreList = props => {
 
@@ -17,18 +16,27 @@ const ShopInStoreList = props => {
             reorderId="my-list"
             onReorder={onReorder.bind(this)}
             touchHoldTime={200}
+            mouseHoldTime={200}
             holdTime={500}
             lock="horizontal"
+            auto
         >
             {props.listToShop.map(item => {
                 let itemName = item.name.replace('_', ' ');
                 itemName = itemName.charAt(0).toUpperCase() + itemName.slice(1);
-                return <ItemInList
-                    clicked={() => props.checkItem(item.name)}
-                    checked={item.checked}
-                    itemName={itemName}
-                    image={props.user === 'bladi' ? item.img_bladi : item.img_beli}
-                    key={item.name} />
+                const imageFormat = [
+                    classes.ima,
+                    item.checked ? classes.greyFormat : ''
+                ]
+                return (
+                    <div key={itemName} className={classes.itemRow} onClick={() => props.checkItem(item.name)} >
+                        <div className={imageFormat.join(' ')} >
+                            <img
+                                src={props.user === 'bladi' ? item.img_bladi : item.img_beli}
+                                alt={itemName} />
+                        </div>
+                        <span className={item.checked ? classes.itemName : ''} >{itemName}</span>
+                    </div>)
             })}
         </Reorder>
     }
